@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Sahod by Anna</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Sahod">
+<meta name="theme-color" content="#EEF1EC">
+<meta name="color-scheme" content="light only">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script src="config.js"></script>
+<script src="lib/chart.umd.min.js" defer></script>
+<style>
+
+/* fonts stored with the app so they work offline */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url(lib/fonts/bricolage-grotesque-latin-ext-opsz-normal.woff2) format('woff2-variations');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url(lib/fonts/bricolage-grotesque-latin-opsz-normal.woff2) format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 900;
+  src: url(lib/fonts/figtree-latin-ext-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 900;
+  src: url(lib/fonts/figtree-latin-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Figtree';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 300 900;
+  src: url(lib/fonts/figtree-latin-ext-wght-italic.woff2) format('woff2-variations');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Figtree';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 300 900;
+  src: url(lib/fonts/figtree-latin-wght-italic.woff2) format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+body.setup-mode nav.tabs{display:none}
+body.setup-mode .iconbtn[data-act="settings"]{display:none}
+.steps{margin:16px 0 0;padding-left:22px}
+.steps li{margin-bottom:18px}
+.steps li.done{color:var(--muted)}
+.status.act{color:var(--ink);text-decoration:underline;cursor:pointer}
+.status{cursor:default}
+:root{
+  --paper:#EEF1EC; --card:#FFFFFF; --ink:#1B2A41; --muted:#5E6B7A; --line:#D6DCD4; --soft:#F5F7F3;
+  --peso:#1F7A55; --peso-soft:#DDEFE5; --mango:#E8A317; --mango-soft:#FBEFD2; --debt:#B8432F; --debt-soft:#F6E0DA;
+  --display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body:"Figtree", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light only;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{touch-action:pan-x pan-y}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none;background:var(--paper);color:var(--ink);font:16px/1.5 var(--body);-webkit-font-smoothing:antialiased;min-height:100%}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--mango);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+/* top bar */
+.wide-on .top{max-width:1180px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);display:flex;align-items:center;gap:12px;padding:14px 18px 10px;max-width:760px;margin:0 auto}
+.brand{font:800 26px/1 var(--display);letter-spacing:-.02em;white-space:nowrap}
+.brand .by{font:500 16px/1 var(--body);color:var(--muted);letter-spacing:0}
+.brand em{font:italic 600 18px/1 var(--body);color:var(--ink)}
+.status{font-size:12px;color:var(--muted);margin-left:auto;text-align:right;min-width:0;line-height:1.3}
+.status.err{color:var(--debt);font-weight:600}
+.iconbtn{border:1px solid var(--line);background:var(--card);border-radius:12px;width:40px;height:40px;display:grid;place-items:center}
+.iconbtn svg{width:20px;height:20px}
+
+main{max-width:760px;margin:0 auto;padding:4px 16px calc(110px + env(safe-area-inset-bottom,0px))}
+main.wide{max-width:1180px}
+.banner{background:var(--mango-soft);border-radius:12px;padding:10px 14px;font-size:14px;margin:0 0 14px}
+h2.sec{font:700 21px/1.2 var(--display);margin:28px 4px 12px;letter-spacing:-.01em}
+.muted{color:var(--muted)}
+
+/* bottom nav */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--card);border-top:1px solid var(--line);padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;gap:6px}
+nav.tabs button{flex:1;max-width:160px;border:0;background:none;border-radius:12px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:13px;font-weight:600;color:var(--muted)}
+nav.tabs button svg{width:22px;height:22px}
+nav.tabs button[aria-current="page"]{color:var(--ink);background:var(--soft)}
+nav.tabs button[aria-current="page"] svg{color:var(--mango)}
+
+/* inputs */
+.money,.txt{border:1px solid transparent;background:transparent;border-radius:8px;padding:6px 8px;width:100%;min-width:0;text-align:right;font-variant-numeric:tabular-nums}
+.txt{text-align:left}
+.money:hover,.txt:hover{border-color:var(--line)}
+.money:focus,.txt:focus{border-color:var(--mango);background:var(--card);outline:none}
+.field{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--muted);margin-bottom:12px}
+.field input,.field select{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--card);color:var(--ink);font-size:16px}
+.check{appearance:none;-webkit-appearance:none;width:24px;height:24px;border:2px solid var(--line);border-radius:7px;display:grid;place-items:center;flex:none;background:var(--card);margin:0}
+.check:checked{background:var(--peso);border-color:var(--peso)}
+.check:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:translateY(-1px) rotate(45deg)}
+.btn{border:0;border-radius:12px;padding:10px 16px;font-weight:600;background:var(--ink);color:var(--paper)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.danger{background:transparent;color:var(--debt);border:1px solid var(--debt)}
+.btn.small{padding:6px 12px;font-size:14px;border-radius:10px}
+.linkbtn{border:0;background:none;color:var(--muted);font-weight:600;padding:6px 4px;font-size:14px}
+.linkbtn:hover{color:var(--ink)}
+
+/* ===== Pay slip ===== */
+.slipnav{display:flex;justify-content:space-between;align-items:center;margin:4px 2px 12px}
+.slip{background:var(--card);border-radius:22px;box-shadow:0 1px 0 var(--line), 0 18px 40px -28px rgba(27,42,65,.45);overflow:hidden}
+.slip-top{padding:20px 22px 22px;background:linear-gradient(var(--mango-soft),var(--mango-soft));position:relative}
+.slip-src{display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:15px}
+.chip{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700;background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.slip-count{font:800 clamp(56px,17vw,96px)/.9 var(--display);letter-spacing:-.04em;margin:14px 0 4px}
+.slip-count small{font:600 20px/1 var(--display);letter-spacing:0;margin-left:8px;color:var(--muted)}
+.slip-date{font-size:15px;color:var(--muted)}
+.slip-salary{display:flex;align-items:baseline;gap:10px;margin-top:16px;padding-top:14px;border-top:1px dashed color-mix(in srgb,var(--ink) 25%,transparent)}
+.slip-salary span{font-size:14px;color:var(--muted)}
+.slip-salary .money{font:700 26px/1.2 var(--display);text-align:left;padding:2px 6px;margin-left:-6px;width:auto;flex:1}
+.perf{height:22px;position:relative;background:radial-gradient(circle at 0 50%,var(--paper) 11px,transparent 12px) left/22px 22px no-repeat,radial-gradient(circle at 100% 50%,var(--paper) 11px,transparent 12px) right/22px 22px no-repeat}
+.perf::after{content:"";position:absolute;left:22px;right:22px;top:50%;border-top:2px dotted var(--line)}
+.bills{list-style:none;margin:0;padding:0 10px}
+.bill{display:grid;grid-template-columns:auto 1fr minmax(100px,36%) auto auto;align-items:center;gap:10px;padding:8px 6px;border-bottom:1px solid var(--line)}
+.bill:last-child{border-bottom:0}
+.bill .name{font-weight:500;min-width:0;overflow-wrap:anywhere}
+.ntxt{display:block;font-size:13px;font-weight:400;color:var(--muted);text-decoration:none;line-height:1.35;margin-top:1px}
+.bill.done .name{color:var(--muted);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--muted) 60%,transparent)}
+.x{border:0;background:none;color:var(--muted);width:32px;height:32px;border-radius:8px;font-size:20px;line-height:1}
+.x:hover{background:var(--soft);color:var(--debt)}
+.bill.save{background:var(--peso-soft);border-radius:14px;border:0;margin:8px 0 4px}
+.bill.save .name{font-weight:700;color:var(--peso)}
+.bill.save .money{font-weight:700}
+.empty{padding:22px 10px;color:var(--muted);text-align:center}
+.addrow{display:grid;grid-template-columns:1fr minmax(100px,34%) auto;gap:8px;padding:12px 16px 4px}
+.addrow input{border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:var(--soft);min-width:0}
+.addrow input.money{text-align:right}
+.slip-foot{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:16px 22px 20px;margin-top:8px;border-top:1px solid var(--line)}
+.stat b{display:block;font:700 18px/1.2 var(--display)}
+.stat span{font-size:13px;color:var(--muted)}
+.neg{color:var(--debt)}
+.pos{color:var(--peso)}
+
+/* ===== Months ===== */
+.monthbar{display:flex;align-items:center;gap:8px;margin:4px 0 14px}
+.monthbar select{font:700 22px/1.2 var(--display);border:0;background:transparent;padding:4px 2px;flex:1;min-width:0;letter-spacing:-.01em}
+.monthbar .iconbtn{flex:none}
+.monthbar .grow{display:none}
+.sumrow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.sum{background:var(--card);border-radius:14px;padding:12px 14px}
+.sum span{font-size:13px;color:var(--muted)}
+.sum b{display:block;font:700 18px/1.25 var(--display)}
+@media (max-width:560px){.sumrow{grid-template-columns:repeat(2,1fr)}.grid .rowhead{min-width:118px;max-width:140px;padding-left:10px}.grid td{min-width:124px}.monthbar select{font-size:19px}}
+.gridwrap{overflow-x:auto;background:var(--card);border-radius:16px;-webkit-overflow-scrolling:touch}
+table.grid{border-collapse:separate;border-spacing:0;min-width:100%;font-size:15px}
+.grid th,.grid td{padding:2px 4px;border-bottom:1px solid var(--line);white-space:nowrap}
+.grid thead th{position:sticky;top:0;background:var(--card);z-index:2;padding:10px 6px 8px;vertical-align:bottom;text-align:right}
+.grid .rowhead{position:sticky;left:0;background:var(--card);z-index:1;text-align:left;min-width:150px;max-width:190px;padding-left:12px;border-right:1px solid var(--line)}
+.grid thead .rowhead{z-index:3}
+.grid td{min-width:132px}
+.grid .total{text-align:right;font-weight:700;padding-right:14px;background:var(--soft)}
+.colhead{border:0;background:none;text-align:right;padding:2px 4px;border-radius:8px;width:100%}
+.colhead b{display:block;font-weight:700}
+.colhead:hover{background:var(--soft)}
+.colhead.next b{color:var(--mango)}
+.namebtn{border:0;background:none;padding:6px 0;text-align:left;width:100%;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.namebtn:hover{text-decoration:underline}
+tr.salary td,tr.salary th{background:var(--soft)}
+tr.salary .money{font-weight:700}
+tr.savings th.rowhead,tr.savings .money{color:var(--peso);font-weight:700}
+tr.left td{text-align:right;padding:8px 12px;font-weight:600}
+tr.left th,tr.alloc th{font-weight:600;color:var(--muted)}
+tr.alloc td{text-align:right;padding:8px 12px;color:var(--muted)}
+tr.gap td,tr.gap th{height:8px;padding:0;background:var(--paper);border:0}
+.oneoff{font-size:11px;color:var(--muted);font-weight:600;margin-left:6px}
+.gridtools{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.gridtools .addrow{padding:0;flex:1;min-width:260px;grid-template-columns:1fr auto}
+.setup{background:var(--card);border-radius:18px;padding:28px 22px;text-align:center}
+.setup h3{font:700 22px/1.2 var(--display);margin:0 0 6px}
+
+/* ===== Dashboard ===== */
+.card{background:var(--card);border-radius:18px;padding:18px 18px 12px;margin-bottom:14px}
+.card header{display:flex;align-items:flex-start;gap:8px}
+.card h3{font:700 18px/1.25 var(--display);margin:0;flex:1}
+.figure{font:800 30px/1.1 var(--display);letter-spacing:-.02em;margin:10px 0 2px}
+.figure small{display:block;font:500 14px/1.4 var(--body);color:var(--muted);letter-spacing:0;margin-top:2px}
+.bar{height:10px;border-radius:999px;background:var(--soft);overflow:hidden;position:relative;margin:12px 0 8px}
+.bar i{position:absolute;inset:0 auto 0 0;border-radius:999px}
+.bar i.a{background:var(--peso)}
+.bar i.b{background:repeating-linear-gradient(-45deg,color-mix(in srgb,var(--peso) 45%,transparent) 0 4px,transparent 4px 8px)}
+.loan .bar i.a{background:var(--ink)}
+.meta{font-size:14px;color:var(--muted);margin:0}
+.kv{display:flex;flex-wrap:wrap;gap:6px 22px;margin:6px 0 4px;font-size:14px}
+.kv b{font-weight:700;color:var(--ink)}
+.kv span{color:var(--muted)}
+.toggle{border:0;background:none;padding:10px 0 4px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:6px}
+.toggle svg{width:16px;height:16px;transition:transform .2s}
+.toggle[aria-expanded="true"] svg{transform:rotate(90deg)}
+.rowswrap{overflow-x:auto;margin:4px -6px 0}
+.rows{width:100%;min-width:330px;border-collapse:collapse;font-size:14px;table-layout:fixed}
+.rows col.cm{width:34%}.rows col.cx{width:34px}.rows col.cc{width:44px}.rows col.cp{width:64px}
+.pill{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;background:var(--soft);color:var(--muted)}
+.pill.ok{background:var(--peso-soft);color:var(--peso)}
+.pill.part{background:var(--mango-soft);color:#8A5A00}
+.donehead{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;padding:14px 4px;margin-top:22px;font:700 21px/1.2 var(--display);color:var(--ink);text-align:left;border-top:1px solid var(--line)}
+.donehead svg{width:18px;height:18px;transition:transform .2s;flex:none}
+.donehead[aria-expanded="true"] svg{transform:rotate(90deg)}
+.donehead .count{font:700 13px/1 var(--body);background:var(--soft);color:var(--muted);border-radius:999px;padding:4px 9px}
+.rows .money{padding:6px 4px}
+@media (max-width:480px){.rows col.cr{width:0}.rows .rem{display:none}.rows col.cm{width:42%}}
+.rows th{font-size:13px;color:var(--muted);font-weight:600;text-align:right;padding:6px 4px}
+.rows th:first-child{text-align:left}
+.rows td{border-top:1px solid var(--line);padding:2px 2px}
+.rows input[type=month],.rows input[type=date]{border:1px solid transparent;background:transparent;border-radius:8px;padding:6px 2px;min-width:0;width:100%;font-size:14px}
+.rows input[type=month]:focus,.rows input[type=date]:focus{border-color:var(--mango);outline:none}
+.rows .ro{text-align:right;padding:8px 8px;color:var(--muted)}
+.rows .lab{padding:8px 4px;font-weight:500}
+.rows td.c{text-align:center;width:40px}
+.rows .check{margin:auto}
+.synced{font-size:13px;background:var(--peso-soft);color:var(--peso);border-radius:10px;padding:6px 10px;margin:10px 0 0;font-weight:600}
+.adds{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 8px}
+
+/* dialog */
+dialog{border:0;border-radius:22px;padding:0;width:min(520px,calc(100% - 24px));background:var(--card);color:var(--ink);box-shadow:0 30px 80px -20px rgba(0,0,0,.45);max-height:calc(100% - 40px)}
+dialog::backdrop{background:rgba(16,22,31,.45)}
+.sheet{padding:22px 20px 20px}
+.sheet h3{font:700 21px/1.2 var(--display);margin:0 0 16px}
+.sheet .actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:8px}
+.sheet .actions .left{margin-right:auto}
+.srcrow{border:1px solid var(--line);border-radius:14px;padding:12px 12px 0;margin-bottom:10px}
+.srcrow .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.srcrow .two > *{min-width:0}
+.field input,.field select{width:100%;min-width:0}
+.srcrow.paused{background:var(--soft)}
+.srcrow .optline b{font-weight:600}
+.srcrow .optline .muted{margin-left:auto}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:12px;font-size:14px;z-index:20;max-width:calc(100% - 32px)}
+.loading{padding:60px 0;text-align:center;color:var(--muted)}
+
+.linkbtn.danger{color:var(--debt)}
+.linkbtn.danger:hover{color:var(--debt);text-decoration:underline}
+.nbtn{border:0;background:none;color:var(--muted);width:32px;height:32px;border-radius:8px;display:grid;place-items:center;padding:0}
+.nbtn svg{width:16px;height:16px}
+.nbtn:hover{background:var(--soft);color:var(--ink)}
+.nbtn.on{color:var(--mango)}
+td.cell{position:relative}
+td.cell .money{padding-left:30px;padding-right:6px}
+.nb{position:absolute;left:3px;top:50%;transform:translateY(-50%);width:26px;height:26px;border:0;border-radius:7px;background:var(--soft);color:var(--muted);display:grid;place-items:center;opacity:0;pointer-events:none;padding:0}
+.nb svg{width:14px;height:14px}
+td.cell.act .nb{opacity:1;pointer-events:auto}
+@media (hover:hover){td.cell:hover .nb{opacity:1;pointer-events:auto}}
+td.cell.hasnote .nb{opacity:1;pointer-events:auto;background:var(--mango-soft);color:#9A6A05}
+.field textarea{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--card);color:var(--ink);font:16px/1.45 var(--body);resize:vertical;min-height:96px}
+.field input:disabled,.field select:disabled{opacity:.45;background:var(--soft)}
+.plist{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);border-radius:12px;padding:6px 10px;margin:4px 0 14px;max-height:260px;overflow:auto}
+.plist label{display:flex;align-items:center;gap:10px;padding:6px 0;color:var(--ink)}
+.plist .sel{font-size:13px;margin-left:auto}
+.optline{display:flex;gap:10px;align-items:center;margin:4px 0 6px;color:var(--ink)}
+.hint{font-size:13px;color:var(--muted);margin:0 0 14px 34px}
+.flabel{font-size:14px;color:var(--muted);margin:0 0 2px}
+.card .hbtns{display:flex;gap:2px}
+.card.done{padding:14px 18px}
+.card.done h3{font-size:16px}
+.card.done .meta{margin-top:4px}
+.donepill{display:inline-block;font-size:12px;font-weight:700;color:var(--peso);background:var(--peso-soft);border-radius:999px;padding:2px 10px;margin-left:8px;vertical-align:2px}
+.rulelist{list-style:none;margin:0 0 10px;padding:0}
+.rulelist li{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin-bottom:6px;font-size:14px}
+.rulelist li span{flex:1}
+.danger-ic{color:var(--debt)}
+
+.slipnav .iconbtn{width:40px;height:40px}
+.slipnav .iconbtn svg{width:18px;height:18px}
+.slipnav .iconbtn:disabled{opacity:.35;cursor:default}
+.icbtn{border:0;background:none;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;color:var(--muted);padding:0}
+.icbtn svg{width:19px;height:19px}
+.icbtn:hover{background:var(--soft);color:var(--ink)}
+.icbtn.ok:hover{color:var(--peso)}
+.syncnote{font-size:13px;background:var(--soft);border-radius:10px;padding:6px 10px;margin:8px 0 0;color:var(--muted)}
+.syncnote b{color:var(--ink)}
+.subform{border:1px solid var(--line);border-radius:14px;padding:12px 12px 2px;margin:0 0 14px}
+.datechips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.datechips span{display:inline-flex;align-items:center;gap:4px;background:var(--mango-soft);border-radius:999px;padding:3px 4px 3px 10px;font-size:14px}
+.datechips button{border:0;background:none;width:22px;height:22px;border-radius:50%;font-size:16px;line-height:1;color:var(--muted)}
+.inline2{display:flex;gap:8px;align-items:flex-end}
+.inline2 .field{flex:1;margin-bottom:10px}
+.inline2 .btn{margin-bottom:10px}
+.chartcard{background:var(--card);border-radius:18px;padding:16px 16px 14px;margin-bottom:16px}
+.chartcard h3{font:700 18px/1.25 var(--display);margin:0}
+.chartcard .sub{font-size:14px;color:var(--muted);margin:2px 0 10px}
+.charthead{display:flex;align-items:flex-start;gap:10px}
+.charthead > div{flex:1}
+.charthead select{border:1px solid var(--line);border-radius:10px;padding:6px 8px;background:var(--card);font-size:14px}
+.chartscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.chartin{height:260px;position:relative}
+.chartkv{display:flex;flex-wrap:wrap;gap:4px 22px;font-size:14px;margin:0 0 8px}
+.chartkv span{color:var(--muted)}
+.chartkv b{color:var(--ink)}
+.chartcard h3 .dot{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:8px;vertical-align:0}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted);margin:0 0 8px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+
+.sechead{display:flex;align-items:baseline;gap:10px;margin:28px 4px 12px}
+.sechead .sec{margin:0;flex:1}
+main > .sechead:first-child,.banner + .sechead{margin-top:8px}
+.reorder{list-style:none;margin:0 0 8px;padding:0}
+.reorder li{display:flex;align-items:center;gap:4px;background:var(--card);border-radius:14px;padding:6px 8px 6px 16px;margin-bottom:8px;font-weight:600}
+.reorder li span{flex:1;min-width:0;overflow-wrap:anywhere}
+.reorder .icbtn:disabled{opacity:.3;cursor:default}
+
+.zoombar{display:flex;justify-content:flex-end;gap:4px;margin:0 0 8px}
+.zbtn{border:1px solid var(--line);background:var(--card);border-radius:10px;min-width:40px;height:36px;font:700 18px/1 var(--body);color:var(--ink);padding:0 10px}
+.zbtn.zval{font-size:13px;font-weight:600;color:var(--muted);min-width:58px}
+.gridwrap{touch-action:pan-x pan-y}
+@media (pointer:coarse){.zbtn{height:40px;min-width:44px}}
+
+tr.ptotal th.rowhead{color:var(--peso);font-weight:600;font-size:14px;white-space:normal;line-height:1.2}
+.rows .tot{font-weight:600;color:var(--ink)}
+.goalrows .rows{min-width:520px}
+.goalrows .rows col.cm{width:92px}
+.goalrows .rows .money{padding:6px 4px}
+.goalrows .rows .ro{padding:8px 6px}
+
+td.ptcell{background:var(--peso-soft)!important}
+td.ptcell .money{font-weight:700;color:var(--peso);text-align:right;padding-left:8px}
+td.ptcell .money[data-ovr]{font-style:italic;color:#8A5A00}
+.rows .tot.hit{color:var(--peso)}
+.reach{margin:6px 0 2px;font-size:14px;background:var(--mango-soft);color:#6B4700;border-radius:10px;padding:7px 10px}
+.reach.no{background:var(--soft);color:var(--muted)}
+
+.lockset{border:0;margin:0;padding:0;min-width:0}
+.grid th.pdone,.grid td.pdone{background:#E7EAE5 !important;color:var(--muted)}
+.grid td.pdone .money{color:var(--muted)}
+.donetag{display:block;font:700 10px/1 var(--body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin-top:4px}
+.grid.locked td,.grid.locked th{background:#EDEFEB !important;color:var(--muted)}
+.grid.locked .money,.grid.locked .namebtn,.grid.locked .colhead{color:var(--muted)}
+input:disabled,button:disabled{-webkit-text-fill-color:currentColor;opacity:1;cursor:default}
+.lockset:disabled .check{opacity:.55}
+.lockset:disabled .nb,.lockset:disabled .x,.lockset:disabled .addrow{display:none}
+.lockbanner{background:var(--soft);color:var(--muted)}
+.donebar{padding:4px 22px 18px}
+.donecheck{font-weight:600}
+.slip.isdone .slip-top{background:#ECEFEA}
+.slip.isdone .bills,.slip.isdone .slip-foot{opacity:.75}
+/* iPhone: safe areas, no zoom-on-focus, comfortable tap targets */
+body::before{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-inset-top,0px);background:var(--paper);z-index:20;pointer-events:none}
+button,input,select,textarea,label{touch-action:manipulation}
+.top,main,nav.tabs{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+dialog{max-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 24px);overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+@media (pointer:coarse){
+  input,select,textarea{font-size:16px !important}
+  .iconbtn{width:44px;height:44px}
+  .icbtn,.nbtn,.x{width:40px;height:40px}
+  .check{width:26px;height:26px}
+  .linkbtn{padding:10px 6px}
+  .nb{width:30px;height:30px}
+  td.cell .money{padding-left:36px;padding-right:8px}
+  .grid td{min-width:152px}
+  .grid .rowhead{min-width:128px}
+}
+@media (max-width:480px){
+  .top{padding-top:10px;padding-bottom:8px}
+  .brand{font-size:24px}
+  main{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+  .slip-top{padding:18px 18px 20px}
+  .slip-count{font-size:clamp(56px,16vw,76px)}
+  .bills{padding:0 6px}
+  .bill{gap:6px;grid-template-columns:auto 1fr minmax(96px,34%) auto auto}
+  .slip-foot{padding:14px 16px 18px}
+  .stat b{font-size:16px}
+  .addrow{padding:12px 12px 4px}
+  .figure{font-size:28px}
+  dialog{width:calc(100% - 16px);margin-bottom:max(8px,env(safe-area-inset-bottom,0px))}
+  .sheet{padding:20px 16px 16px}
+  .sheet .actions .btn{flex:1}
+  .sheet .actions .left{flex-basis:100%;margin-right:0}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="brand">Sahod <span class="by">by <em>Anna</em></span></div>
+  <div class="status" id="status" aria-live="polite"></div>
+  <button class="iconbtn" data-act="settings" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+</div>
+<main id="main"><div class="loading">Opening your tracker…</div></main>
+<nav class="tabs" id="tabs">
+  <button data-act="tab" data-tab="payday"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg>Payday</button>
+  <button data-act="tab" data-tab="dash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Dashboard</button>
+  <button data-act="tab" data-tab="months"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 10h18M9 4v17M8 2v4M16 2v4"/></svg>Months</button>
+  <button data-act="tab" data-tab="charts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>Charts</button>
+</nav>
+<dialog id="sheet"></dialog>
+<datalist id="itemnames"></datalist>
+<script>
+(() => {
+"use strict";
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const main = $("#main");
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const r2 = n => Math.round((+n || 0) * 100) / 100;
+const fmt = n => r2(n).toLocaleString("en-PH", {minimumFractionDigits:2, maximumFractionDigits:2});
+const peso = n => (n < 0 ? "−₱" : "₱") + fmt(Math.abs(n));
+const parseNum = s => { const v = parseFloat(String(s ?? "").replace(/[^0-9.\-]/g, "")); return isFinite(v) ? r2(v) : 0; };
+const clone = o => JSON.parse(JSON.stringify(o));
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const WEEKDAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const pad = n => String(n).padStart(2, "0");
+const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; };
+const thisMonth = () => todayISO().slice(0,7);
+const toDate = iso => { const [y,m,d] = iso.split("-").map(Number); return new Date(y, m-1, d || 1); };
+const monthLabel = key => { const [y,m] = key.split("-").map(Number); return `${MONTHS[m-1]} ${y}`; };
+const shortMonth = key => { const [y,m] = key.split("-").map(Number); return `${MONTHS[m-1].slice(0,3)} ${y}`; };
+const dayLabel = iso => toDate(iso).toLocaleDateString("en-US", {month:"short", day:"numeric"});
+const longDate = iso => toDate(iso).toLocaleDateString("en-US", {weekday:"long", month:"long", day:"numeric", year:"numeric"});
+const ordinal = n => n + (n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th","st","nd","rd"][n % 10] || "th");
+const addMonth = (key, k) => { let [y,m] = key.split("-").map(Number); m += k; y += Math.floor((m-1)/12); m = ((m-1)%12+12)%12+1; return `${y}-${pad(m)}`; };
+const uid6 = () => Math.random().toString(36).slice(2, 8);
+const lastDay = key => { const [y,m] = key.split("-").map(Number); return new Date(y, m, 0).getDate(); };
+const moneyInput = (key, act, val, attrs = "", ph = "") =>
+  `<input class="money" inputmode="decimal" autocomplete="off" data-money data-key="${esc(key)}" data-act="${act}" data-raw="${val ? r2(val) : ""}" value="${val ? fmt(val) : ""}" placeholder="${ph}" ${attrs}>`;
+const noteIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>`;
+const chevL = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>`;
+const chevUp = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>`;
+const chevDown = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
+const chevR = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>`;
+const pencilIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>`;
+const doneIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/></svg>`;
+const trashIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>`;
+
+/* ---------- state ---------- */
+const S = { db:null, base:null, local:false, ready:false, settings:null, dash:null, months:{}, tab:"payday", monthKey:null, slipRef:null, slipIdx:0, open:{}, deferred:false, activeCell:null };
+const DEFAULT_SETTINGS = { sources:[
+  {id:"ud", name:"Undetectable AI", short:"UD", schedule:"weekly", weekday:1, amount:35000},
+  {id:"acn", name:"Accenture", short:"ACN", schedule:"semimonthly", amount:31000},
+  {id:"ss", name:"SuiteSpot", short:"SS", schedule:"monthly", day:30, amount:103000}], extraPayrolls:[]};
+const src = id => (S.settings?.sources || []).find(s => s.id === id) || {id, name:id || "Payroll", short:(id||"?").toUpperCase(), amount:0};
+const monthKeys = () => Object.keys(S.months).sort();
+const laterKeys = k => monthKeys().filter(x => x > k);
+
+/* ---------- math ---------- */
+const vis = m => m.payrolls.filter(p => !p.off);
+const itemsTotal = (m, pid) => m.items.reduce((s, i) => s + (+i.amounts[pid] || 0), 0);
+const leftOf = (m, p) => r2((+p.salary || 0) - itemsTotal(m, p.id));
+function monthStats(m){
+  let income=0, alloc=0, saved=0, left=0;
+  for (const p of vis(m)){ income += +p.salary||0; const a = itemsTotal(m,p.id); alloc += a; saved += +p.savings||0; left += (+p.salary||0) - a; }
+  return {income:r2(income), alloc:r2(alloc), saved:r2(saved), left:r2(left)};
+}
+/* Projected total savings, month by month: */
+/*   this month's Projected savings + the previous month's Total savings. */
+/* A finished month passes on what was actually saved; this month and later months pass on their projection. */
+/* Typing your own amount for a month replaces it, and later months build on your amount. */
+function totalsStart(){
+  const g = (S.dash?.goals || []).filter(x => !x.done && x.linkFrom && x.syncType !== "item").map(x => x.linkFrom).sort()[0];
+  return g || monthKeys()[0];
+}
+function chainTotals(start){
+  const out = {}; let prev = 0; const cur = thisMonth();
+  for (const k of monthKeys().filter(x => x >= start)){
+    const m = M(k), st = monthStats(m), ovr = m.projTotal != null;
+    const proj = ovr ? +m.projTotal : r2(prev + st.left);
+    const carried = ovr ? +m.projTotal : (k < cur ? r2(prev + st.saved) : proj);
+    out[k] = {proj, carried, ovr}; prev = carried;
+  }
+  return out;
+}
+function allPayrolls(){
+  const out = [];
+  for (const k of monthKeys()) for (const p of vis(S.months[k])) out.push({k, pid:p.id, date:p.date});
+  return out.sort((a,b) => a.date.localeCompare(b.date) || a.k.localeCompare(b.k));
+}
+/* Next payroll from today that isn't marked done (falls back to the next one by date). */
+function upcomingIndex(list){
+  const t = todayISO();
+  let i = list.findIndex(x => x.date >= t && !M(x.k).payrolls.find(p => p.id === x.pid)?.done);
+  if (i < 0) i = list.findIndex(x => x.date >= t);
+  return i < 0 ? list.length - 1 : i;
+}
+const isPast = k => k < thisMonth();
+const findItem = (m, name) => m.items.find(x => x.name.trim().toLowerCase() === name.trim().toLowerCase());
+function ordOf(m, p){ const same = m.payrolls.filter(x => x.source === p.source); return same.indexOf(p); }
+function mapPid(fromM, pid, toM){ const p = fromM.payrolls.find(x => x.id === pid); if (!p) return null; const same = toM.payrolls.filter(x => x.source === p.source); return same[ordOf(fromM, p)]?.id || null; }
+const newId = (list, pre) => { let n = list.length + 1; while (list.some(x => x.id === pre + n)) n++; return pre + n; };
+
+/* ---------- persistence: local first, then Google Sheets ---------- */
+/* Every change is saved on this device right away and queued.
+   When you're online and signed in, queued changes are sent to your Google Sheet. */
+const CFG = window.SAHOD_CONFIG || {};
+const LS = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } },
+  del(k){ try { localStorage.removeItem(k); } catch(e){} }
+};
+const K_DOCS = "sahod:docs", K_DIRTY = "sahod:dirty", K_SHEET = "sahod:sheet", K_TOKEN = "sahod:token", K_SIGNED = "sahod:signedIn", K_PULLED = "sahod:lastPull";
+const SCOPE = "https://www.googleapis.com/auth/spreadsheets";
+const DATA_TAB = "_data", CHUNK = 45000, CHUNK_COLS = 6;
+const pending = new Set(), inflight = new Set();
+let syncTimer = null, syncing = false, syncAgain = false, seq = 0;
+
+function setStatus(t, kind){ const el = $("#status"); el.textContent = t; el.classList.toggle("err", kind === "err"); el.classList.toggle("act", kind === "auth"); el.dataset.kind = kind || ""; }
+function docBody(id){ if (id === "settings") return S.settings; if (id === "dashboard") return S.dash; if (id.startsWith("m-")) return S.months[id.slice(2)]; }
+function dirtyMap(){ return LS.get(K_DIRTY, {}); }
+function dirtyCount(){ return Object.keys(dirtyMap()).length; }
+function save(id){
+  const docs = LS.get(K_DOCS, {}); const b = docBody(id);
+  docs[id] = b ? clone(b) : null;
+  const dm = dirtyMap(); dm[id] = ++seq + Date.now();
+  if (!LS.set(K_DOCS, docs)) { setStatus("Phone storage is full. Changes may not be saved.", "err"); return; }
+  LS.set(K_DIRTY, dm);
+  clearTimeout(syncTimer); syncTimer = setTimeout(sync, 1200);
+  showSyncState("Saving…");
+}
+function showSyncState(busy){
+  const n = dirtyCount();
+  if (!n) return setStatus(tokenValid() ? "Synced" : "Saved on this phone", tokenValid() ? "" : "auth");
+  if (!navigator.onLine) return setStatus(`Offline, ${n} change${n === 1 ? "" : "s"} waiting`);
+  if (!tokenValid()) return setStatus(`Tap to sign in and sync ${n} change${n === 1 ? "" : "s"}`, "auth");
+  setStatus(busy || "Saving…");
+}
+$("#status").addEventListener("click", () => {
+  const k = $("#status").dataset.kind;
+  if (k === "auth") signIn(false);
+  else if (k === "err") sync();
+});
+window.addEventListener("online", () => { showSyncState(); sync(); pull(true); });
+window.addEventListener("offline", () => showSyncState());
+
+/* ----- Google sign-in (redirect flow, works inside the iPhone Home Screen app) ----- */
+function redirectUri(){ return CFG.redirectUri || (location.origin + location.pathname.replace(/index\.html$/, "")); }
+function token(){ const t = LS.get(K_TOKEN, null); return t && t.exp > Date.now() ? t.t : null; }
+function tokenValid(){ return !!token(); }
+function signIn(silent){
+  if (!CFG.clientId){ toast("Add your Google client ID to config.js first."); return; }
+  if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  const state = uid6() + uid6(); try { sessionStorage.setItem("sahod:state", state); if (silent) sessionStorage.setItem("sahod:silentAt", String(Date.now())); } catch(e){}
+  const p = new URLSearchParams({client_id:CFG.clientId, redirect_uri:redirectUri(), response_type:"token", scope:SCOPE, include_granted_scopes:"true", state});
+  if (silent) p.set("prompt", "none");
+  location.href = "https://accounts.google.com/o/oauth2/v2/auth?" + p.toString();
+}
+function signOut(){ LS.del(K_TOKEN); LS.del(K_SIGNED); showSyncState(); toast("Signed out. Your data stays on this phone and in your Google Sheet."); }
+/* Reads the token Google sends back in the address after sign-in. */
+function handleAuthReturn(){
+  if (!location.hash || location.hash.length < 2) return null;
+  const h = new URLSearchParams(location.hash.slice(1));
+  if (!h.has("access_token") && !h.has("error")) return null;
+  let expected = null; try { expected = sessionStorage.getItem("sahod:state"); } catch(e){}
+  history.replaceState(null, "", location.pathname + location.search);
+  if (h.get("error")) return {error:h.get("error")};
+  if (expected && h.get("state") !== expected) return {error:"state_mismatch"};
+  LS.set(K_TOKEN, {t:h.get("access_token"), exp:Date.now() + (parseInt(h.get("expires_in"), 10) || 3600) * 1000 - 120000});
+  LS.set(K_SIGNED, true);
+  return {ok:true};
+}
+
+/* ----- Google Sheets API ----- */
+const SHEETS = "https:" + "//sheets.googleapis.com/v4/spreadsheets";
+async function api(path, opts){
+  const t = token(); if (!t) throw {code:"auth"};
+  const r = await fetch(SHEETS + path, Object.assign({}, opts, {headers:{Authorization:"Bearer " + t, "Content-Type":"application/json"}}));
+  if (r.status === 401){ LS.del(K_TOKEN); throw {code:"auth"}; }
+  if (!r.ok){ let msg = ""; try { msg = (await r.json()).error.message; } catch(e){} throw {code:"http", status:r.status, message:msg || ("Google Sheets error " + r.status)}; }
+  return r.status === 204 ? {} : r.json();
+}
+const sheetId = () => LS.get(K_SHEET, null);
+const q = s => encodeURIComponent(s);
+let sheetTabs = null;
+async function tabs(){ if (sheetTabs) return sheetTabs; const r = await api(`/${sheetId()}?fields=sheets.properties(sheetId,title)`); sheetTabs = {}; (r.sheets || []).forEach(s => sheetTabs[s.properties.title] = s.properties.sheetId); return sheetTabs; }
+async function ensureTab(title, extra){
+  const t = await tabs(); if (title in t) return {id:t[title], created:false};
+  const r = await api(`/${sheetId()}:batchUpdate`, {method:"POST", body:JSON.stringify({requests:[{addSheet:{properties:{title}}}].concat(extra || [])})});
+  const id = r.replies[0].addSheet.properties.sheetId; t[title] = id; return {id, created:true};
+}
+async function ensureDataTab(){
+  const r = await ensureTab(DATA_TAB);
+  if (r.created) await api(`/${sheetId()}/values/${q(DATA_TAB + "!A1:C1")}?valueInputOption=RAW`, {method:"PUT", body:JSON.stringify({values:[["id","updated","json (do not edit)"]]})});
+}
+async function readRemote(){
+  const r = await api(`/${sheetId()}/values/${q(DATA_TAB + "!A2:H")}`);
+  const docs = {};
+  for (const row of (r.values || [])){ const id = String(row[0] || ""); const json = row.slice(2).join(""); if (id && json) { try { docs[id] = JSON.parse(json); } catch(e){} } }
+  return docs;
+}
+async function pushDocs(ids){
+  const col = await api(`/${sheetId()}/values/${q(DATA_TAB + "!A:A")}`);
+  const rows = (col.values || []).map(r => String(r[0] || ""));
+  let next = Math.max(rows.length, 1) + 1; const docs = LS.get(K_DOCS, {}); const data = [];
+  for (const id of ids){
+    let row = rows.indexOf(id) + 1; const body = docs[id];
+    if (!row){ if (!body) continue; row = next++; }
+    const json = body ? JSON.stringify(body) : "";
+    const chunks = []; for (let i = 0; i < json.length; i += CHUNK) chunks.push(json.slice(i, i + CHUNK));
+    if (chunks.length > CHUNK_COLS) throw {code:"http", message:"A month is too large to save."};
+    while (chunks.length < CHUNK_COLS) chunks.push("");
+    data.push({range:`${DATA_TAB}!A${row}:H${row}`, values:[[body ? id : "", body ? new Date().toISOString() : ""].concat(chunks)]});
+  }
+  if (data.length) await api(`/${sheetId()}/values:batchUpdate`, {method:"POST", body:JSON.stringify({valueInputOption:"RAW", data})});
+}
+/* A readable copy of each month, laid out like your original tracker. */
+async function writeMonthTab(k){
+  const m = S.months[k]; const title = monthLabel(k); const t = await tabs();
+  if (!m){ if (title in t){ await api(`/${sheetId()}:batchUpdate`, {method:"POST", body:JSON.stringify({requests:[{deleteSheet:{sheetId:t[title]}}]})}); delete t[title]; } return; }
+  const r = await ensureTab(title);
+  const pays = vis(m); const st = monthStats(m);
+  const rows = [["Dates", ...pays.map(p => `${dayLabel(p.date)} ${src(p.source).short}`), "Total"],
+    ["Salary", ...pays.map(p => +p.salary || 0), st.income],
+    ["Savings", ...pays.map(p => +p.savings || 0), st.saved],
+    ["Projected savings", ...pays.map(p => leftOf(m, p)), st.left],
+    ...m.items.map(i => [i.name, ...pays.map(p => +i.amounts[p.id] || ""), pays.reduce((s, p) => s + (+i.amounts[p.id] || 0), 0)])];
+  if (m.projTotal != null) rows.push(["Projected total savings (your amount)", ...pays.map(() => ""), +m.projTotal]);
+  const notes = Object.entries(m.notes || {});
+  if (notes.length){ rows.push([], ["Notes"]); for (const [nk, v] of notes){ const [pid, ref] = nk.split(":"); const p = m.payrolls.find(x => x.id === pid); rows.push([ref === "salary" ? "Salary" : ref === "savings" ? "Savings" : (m.items.find(x => x.id === ref)?.name || ""), p ? dayLabel(p.date) : "", v]); } }
+  await api(`/${sheetId()}/values/${q(title)}:clear`, {method:"POST", body:"{}"});
+  await api(`/${sheetId()}/values/${q(title + "!A1")}?valueInputOption=RAW`, {method:"PUT", body:JSON.stringify({values:rows})});
+  if (r.created) await api(`/${sheetId()}:batchUpdate`, {method:"POST", body:JSON.stringify({requests:[
+    {updateSheetProperties:{properties:{sheetId:r.id, gridProperties:{frozenRowCount:1, frozenColumnCount:1}}, fields:"gridProperties.frozenRowCount,gridProperties.frozenColumnCount"}},
+    {repeatCell:{range:{sheetId:r.id, startRowIndex:0, endRowIndex:1}, cell:{userEnteredFormat:{textFormat:{bold:true}}}, fields:"userEnteredFormat.textFormat.bold"}},
+    {repeatCell:{range:{sheetId:r.id, startColumnIndex:0, endColumnIndex:1}, cell:{userEnteredFormat:{textFormat:{bold:true}}}, fields:"userEnteredFormat.textFormat.bold"}},
+    {repeatCell:{range:{sheetId:r.id, startRowIndex:1, startColumnIndex:1}, cell:{userEnteredFormat:{numberFormat:{type:"NUMBER", pattern:"#,##0.00"}}}, fields:"userEnteredFormat.numberFormat"}}]})});
+}
+
+/* Sends queued changes. */
+async function sync(){
+  if (syncing){ syncAgain = true; return; }
+  const dm = dirtyMap(); const ids = Object.keys(dm);
+  if (!ids.length || !sheetId()){ showSyncState(); return; }
+  if (!navigator.onLine || !tokenValid()){ showSyncState(); return; }
+  syncing = true; ids.forEach(id => inflight.add(id)); setStatus("Syncing…");
+  try {
+    await pushDocs(ids);
+    const now = dirtyMap(); for (const id of ids) if (now[id] === dm[id]) delete now[id]; LS.set(K_DIRTY, now);
+    showSyncState();
+    for (const id of ids) if (id.startsWith("m-")) { try { await writeMonthTab(id.slice(2)); } catch(e){ sheetTabs = null; } }
+  } catch(e){
+    if (e && e.code === "auth") showSyncState();
+    else setStatus(navigator.onLine ? "Couldn't sync. Tap to try again." : `Offline, ${dirtyCount()} changes waiting`, navigator.onLine ? "err" : "");
+  } finally {
+    syncing = false; inflight.clear();
+    if (syncAgain){ syncAgain = false; setTimeout(sync, 400); }
+  }
+}
+/* Gets the latest from your Google Sheet. Queued local changes always win. */
+async function pull(quiet){
+  if (!sheetId() || !navigator.onLine || !tokenValid()) return false;
+  try {
+    const remote = await readRemote(); const dm = dirtyMap(); const docs = LS.get(K_DOCS, {});
+    let changed = false;
+    for (const [id, body] of Object.entries(remote)) if (!(id in dm) && JSON.stringify(docs[id]) !== JSON.stringify(body)){ docs[id] = body; applyDoc(id, clone(body)); changed = true; }
+    for (const id of Object.keys(docs)) if (!(id in remote) && !(id in dm)){ delete docs[id]; applyDoc(id, null); changed = true; }
+    LS.set(K_DOCS, docs); LS.set(K_PULLED, Date.now());
+    if (changed && S.ready){ if (editing() || dlg.open) S.deferred = true; else render(); }
+    showSyncState(); return true;
+  } catch(e){ if (!quiet) toast("Couldn't load from Google Sheets."); showSyncState(); return false; }
+}
+
+/* ---------- payroll generation ---------- */
+function ruleDates(rule, key){
+  const [y,m] = key.split("-").map(Number); const last = lastDay(key); const out = [];
+  const d = n => `${y}-${pad(m)}-${pad(Math.min(n, last))}`;
+  if (rule.schedule === "weekly"){ const wd = rule.weekday == null ? 1 : +rule.weekday; for (let i=1; i<=last; i++) if (new Date(y,m-1,i).getDay() === wd) out.push(d(i)); }
+  else if (rule.schedule === "semimonthly"){ out.push(d(15), d(30)); }
+  else if (rule.schedule === "dates"){ out.push(...(rule.dates || []).filter(x => x.startsWith(key + "-"))); }
+  else out.push(d(+rule.day || 30));
+  return out;
+}
+function allRules(key){
+  const off = new Set(S.settings.sources.filter(s => s.enabled === false).map(s => s.id));
+  return [...S.settings.sources.filter(s => !off.has(s.id)).map(s => ({...s, source:s.id})), ...(S.settings.extraPayrolls || []).filter(r => r.from <= key && !off.has(r.source))];
+}
+function genPayrolls(key){
+  const out = [];
+  for (const r of allRules(key)) for (const date of ruleDates(r, key))
+    if (!out.some(x => x.source === r.source && x.date === date)) out.push({date, source:r.source, salary:+r.amount||0});
+  out.sort((a,b) => a.date.localeCompare(b.date));
+  return out.map((p,i) => ({id:"p"+(i+1), date:p.date, source:p.source, salary:p.salary, savings:0, savingsDone:false, paid:{}}));
+}
+function addPayrollTo(m, date, source, salary){
+  if (m.payrolls.some(x => x.source === source && x.date === date)) return null;
+  const id = newId(m.payrolls, "p");
+  m.payrolls.push({id, date, source, salary, savings:0, savingsDone:false, paid:{}});
+  m.payrolls.sort((a,b) => a.date.localeCompare(b.date));
+  return id;
+}
+function createMonth(key){
+  const prevKey = monthKeys().filter(k => k < key).pop();
+  const prev = prevKey ? S.months[prevKey] : null;
+  const m = {key, payrolls:genPayrolls(key), items:[], notes:{}};
+  if (prev){
+    for (const it of prev.items){
+      if (it.recurring === false || (it.until && it.until < key)) continue;
+      const amounts = {};
+      for (const p of m.payrolls){
+        const same = prev.payrolls.filter(x => x.source === p.source);
+        const q = same[Math.min(ordOf(m, p), same.length-1)];
+        const v = q && it.amounts[q.id]; if (v) amounts[p.id] = v;
+      }
+      m.items.push(Object.assign({id:"i"+(m.items.length+1), name:it.name, amounts}, it.until ? {until:it.until} : {}));
+    }
+  }
+  S.months[key] = m;
+  save("m-"+key);
+}
+
+/* ---------- item helpers (apply to later months) ---------- */
+function forwardItem(k, name, amounts, onlyMissing){
+  const from = M(k);
+  for (const k2 of laterKeys(k)){
+    const m2 = M(k2); let it = findItem(m2, name);
+    if (it && onlyMissing) continue;
+    if (!it){ it = {id:newId(m2.items, "i"), name, amounts:{}}; m2.items.push(it); }
+    delete it.recurring;
+    for (const [pid, v] of Object.entries(amounts)){ const t = mapPid(from, pid, m2); if (t && v) it.amounts[t] = v; }
+    save("m-"+k2);
+  }
+}
+function dropItem(m, it){
+  m.items = m.items.filter(x => x !== it);
+  m.payrolls.forEach(p => p.paid && delete p.paid[it.id]);
+  if (m.notes) for (const nk of Object.keys(m.notes)) if (nk.endsWith(":" + it.id)) delete m.notes[nk];
+}
+function removeLater(k, name){
+  for (const k2 of laterKeys(k)){ const m2 = M(k2); const it = findItem(m2, name); if (it){ dropItem(m2, it); save("m-"+k2); } }
+}
+
+/* Pause or resume an income from a month onward. Paused payrolls are hidden, not deleted, so resuming brings back their items. */
+function setSourceOff(id, from, off){
+  const s = S._srcDraft.find(x => x.id === id) || src(id);
+  for (const k of monthKeys().filter(x => x >= from)){
+    const m = M(k); let changed = false;
+    for (const p of m.payrolls) if (p.source === id && !!p.off !== off){ if (off) p.off = true; else delete p.off; changed = true; }
+    if (!off && !m.payrolls.some(p => p.source === id)) for (const d of ruleDates(s, k)) if (addPayrollTo(m, d, id, +s.amount || 0)) changed = true;
+    if (changed) save("m-" + k);
+  }
+}
+
+/* A loan whose payments cover the total is marked done automatically (unless you reopened it). */
+function autoDoneLoans(){
+  if (!S.dash) return;
+  for (const l of S.dash.loans){
+    if (l.done || l.keepOpen || !(+l.total > 0)) continue;
+    const f = loanFigures(l);
+    if (f.paidAmt > 0 && f.bal <= 0.005){ l.done = true; l.doneAt = todayISO(); l.autoDone = true; save("dashboard"); toast(`${l.name} is fully paid and moved to Completed trackers`); }
+  }
+}
+
+/* ---------- Months table zoom (buttons, pinch, ctrl/trackpad pinch) ---------- */
+const ZKEY = "sahod:gridZoom";
+let gridZoom = (() => { try { const v = parseFloat(localStorage.getItem(ZKEY)); return v >= 0.5 && v <= 1.6 ? v : 1; } catch(e){ return 1; } })();
+function setZoom(z, live){
+  gridZoom = Math.min(1.6, Math.max(0.5, Math.round(z * 100) / 100));
+  const t = main.querySelector("table.grid"); if (t) t.style.zoom = gridZoom;
+  const lab = main.querySelector(".zval"); if (lab) lab.textContent = Math.round(gridZoom * 100) + "%";
+  if (!live) try { localStorage.setItem(ZKEY, String(gridZoom)); } catch(e){}
+}
+let pinch = null;
+const tdist = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+document.addEventListener("touchstart", e => { if (e.touches.length === 2 && e.target.closest && e.target.closest(".gridwrap")) pinch = {d:tdist(e.touches), z:gridZoom}; }, {passive:true});
+document.addEventListener("touchmove", e => {
+  if (e.touches.length < 2) return;
+  /* No page zoom anywhere; only the Months table zooms. */
+  e.preventDefault();
+  if (pinch) setZoom(pinch.z * tdist(e.touches) / pinch.d, true);
+}, {passive:false});
+document.addEventListener("touchend", e => { if (pinch && e.touches.length < 2){ pinch = null; setZoom(gridZoom); } });
+["gesturestart","gesturechange","gestureend"].forEach(t => document.addEventListener(t, e => e.preventDefault(), {passive:false}));
+document.addEventListener("wheel", e => { if (!e.ctrlKey) return; e.preventDefault(); if (e.target.closest && e.target.closest(".gridwrap")) setZoom(gridZoom * (1 - e.deltaY * 0.01)); }, {passive:false});
+
+
+/* ---------- rendering ---------- */
+let rq = false, pdown = false, needRender = false;
+document.addEventListener("pointerdown", () => { pdown = true; }, true);
+const pup = () => { pdown = false; if (needRender){ needRender = false; setTimeout(render, 0); } };
+document.addEventListener("pointerup", pup, true); document.addEventListener("pointercancel", pup, true);
+let pdownT;
+function render(){ if (pdown){ needRender = true; clearTimeout(pdownT); pdownT = setTimeout(() => { pdown = false; if (needRender){ needRender = false; render(); } }, 800); return; } if (rq) return; rq = true; const run = () => { if (!rq) return; rq = false; try { doRender(); } catch(e){ showFatal(e); } };
+  requestAnimationFrame(run); setTimeout(run, 120); }
+/* If something goes wrong, show it on screen instead of hanging on the loading message. */
+function showFatal(e, title){
+  const msg = (e && (e.message || e.reason?.message || e.reason || e)) || "Unknown error";
+  main.innerHTML = `<div class="setup"><h3>${esc(title || "Something went wrong")}</h3>
+    <p class="muted" style="word-break:break-word">${esc(String(msg)).slice(0, 400)}</p>
+    <p class="muted" style="font-size:14px">Take a screenshot of this and send it to Claude, then tap Reload.</p>
+    <button class="btn" onclick="location.reload()">Reload</button></div>`;
+}
+window.addEventListener("error", e => { if (!S.ready) showFatal(e.error || e.message); });
+window.addEventListener("unhandledrejection", e => { if (!S.ready) showFatal(e.reason); });
+function editing(){ const a = document.activeElement; return a && main.contains(a) && a.matches("input:not([type=checkbox])"); }
+function doRender(){
+  document.querySelectorAll("#tabs button").forEach(b => b.dataset.tab === S.tab ? b.setAttribute("aria-current","page") : b.removeAttribute("aria-current"));
+  if (!S.ready) return;
+  const a = document.activeElement; const key = a && main.contains(a) ? a.dataset.key : null;
+  if (S.tab === "months" && !S.monthKey) S.monthKey = thisMonth();
+  autoDoneLoans();
+  const viewId = S.tab + "|" + (S.tab === "months" ? S.monthKey : "");
+  const same = S.lastView === viewId; const sy = window.scrollY;
+  const scrolls = [...main.querySelectorAll("[data-scroll]")].map(el => [el.dataset.scroll, el.scrollLeft, el.scrollTop]);
+  main.classList.toggle("wide", S.tab === "months"); document.body.classList.toggle("wide-on", S.tab === "months");
+  const banner = S.loadError ? `<p class="banner">${esc(S.loadError)}</p>` : "";
+  destroyCharts();
+  main.innerHTML = banner + (S.tab === "payday" ? viewPayday() : S.tab === "months" ? viewMonths() : S.tab === "charts" ? viewCharts() : viewDash());
+  $("#itemnames").innerHTML = [...new Set(Object.values(S.months).flatMap(m => m.items.map(i => i.name)))].sort().map(n => `<option value="${esc(n)}">`).join("");
+  if (same && S.keepScroll && S.sheetScroll){ S.keepScroll--; const g = scrolls.find(x => x[0] === "grid"); if (g) g[1] = S.sheetScroll.gl; }
+  if (same){ for (const [id, l, t] of scrolls){ const el = main.querySelector(`[data-scroll="${id}"]`); if (el){ el.scrollLeft = l; el.scrollTop = t; } } window.scrollTo(0, S.keepScroll !== undefined && S.keepScroll > 0 && S.sheetScroll ? S.sheetScroll.y : sy); }
+  S.lastView = viewId;
+  if (key){ const el = main.querySelector(`[data-key="${CSS.escape(key)}"]`); if (el){ el.focus({preventScroll:true}); if (el.hasAttribute("data-money")) { el.value = el.dataset.raw; el.select?.(); } } }
+  if (S.tab === "charts") drawCharts();
+}
+
+/* ----- Payday ----- */
+function viewPayday(){
+  const list = allPayrolls();
+  if (!list.length) return `<div class="setup"><h3>No payrolls yet</h3><p class="muted">Set up a month to see your next payday here.</p><button class="btn" data-act="tab" data-tab="months">Go to Months</button></div>`;
+  const up = upcomingIndex(list);
+  let idx = S.slipRef ? list.findIndex(x => x.k === S.slipRef.k && x.pid === S.slipRef.pid) : -1;
+  if (idx < 0){ idx = up; S.slipRef = null; }
+  S.slipIdx = idx;
+  const ref = list[idx]; const m = S.months[ref.k]; const p = m.payrolls.find(x => x.id === ref.pid);
+  const s = src(p.source); const notes = m.notes || {};
+  const dd = toDate(p.date);
+  const rows = m.items.filter(i => i.amounts[p.id] !== undefined && i.amounts[p.id] !== null);
+  const alloc = itemsTotal(m, p.id), left = leftOf(m, p);
+  const paidAmt = rows.reduce((t,i) => t + (p.paid?.[i.id] ? +i.amounts[p.id]||0 : 0), 0);
+  const plan = p.savingsDone ? p.savings : (p.savingsPlan ?? Math.max(left, 0));
+  const kp = `${ref.k}:${p.id}`;
+  const nbtn = (nk, label) => `<button class="nbtn${notes[nk] ? " on" : ""}" data-act="note" data-k="${ref.k}" data-nk="${nk}" aria-label="${notes[nk] ? "Edit" : "Add"} note for ${esc(label)}">${noteIcon}</button>`;
+  const bills = rows.map(i => {
+    const done = !!p.paid?.[i.id]; const nk = `${p.id}:${i.id}`;
+    return `<li class="bill${done ? " done" : ""}">
+      <input type="checkbox" class="check" data-act="paid" data-k="${ref.k}" data-p="${p.id}" data-i="${i.id}" ${done ? "checked" : ""} aria-label="Paid ${esc(i.name)}">
+      <span class="name">${esc(i.name)}${notes[nk] ? `<small class="ntxt">${esc(notes[nk])}</small>` : ""}</span>
+      ${moneyInput(`cell:${kp}:${i.id}`, "cell", i.amounts[p.id], `data-k="${ref.k}" data-p="${p.id}" data-i="${i.id}" aria-label="${esc(i.name)} amount"`)}
+      ${nbtn(nk, i.name)}
+      <button class="x" data-act="unassign" data-k="${ref.k}" data-p="${p.id}" data-i="${i.id}" aria-label="Remove ${esc(i.name)} from this payroll">×</button>
+    </li>`;}).join("");
+  const svk = `${p.id}:savings`;
+  return `
+  <div class="slipnav">
+    <button class="iconbtn" data-act="slip" data-d="-1" aria-label="Earlier payroll" ${idx <= 0 ? "disabled" : ""}>${chevL}</button>
+    ${idx !== up ? `<button class="linkbtn" data-act="slip-up">Back to upcoming</button>` : `<span class="muted" style="font-size:14px">Upcoming payroll</span>`}
+    <button class="iconbtn" data-act="slip" data-d="1" aria-label="Later payroll" ${idx >= list.length-1 ? "disabled" : ""}>${chevR}</button>
+  </div>
+  <section class="slip${p.done ? " isdone" : ""}" aria-label="Payroll for ${esc(longDate(p.date))}"><fieldset class="lockset" ${isPast(ref.k) ? "disabled" : ""}>
+    <div class="slip-top">
+      <div class="slip-src"><span>${esc(s.name)}${p.done ? `<span class="pill ok" style="margin-left:8px">Done</span>` : ""}</span><span class="chip">${esc(s.short)}</span></div>
+      <div class="slip-count num">${esc(dd.toLocaleDateString("en-US", {month:"short", day:"numeric"}))}</div>
+      <div class="slip-date">${esc(WEEKDAYS[dd.getDay()])}, ${dd.getFullYear()}${p.date === todayISO() ? ", today" : ""}</div>
+      <label class="slip-salary"><span>Salary</span>${moneyInput(`psal:${kp}`, "p-salary", p.salary, `data-k="${ref.k}" data-p="${p.id}"`, "0.00")}</label>
+    </div>
+    <div class="perf" aria-hidden="true"></div>
+    <ul class="bills">
+      ${bills || `<li class="empty">Nothing allocated to this payroll yet. Add an item below.</li>`}
+      <li class="bill save">
+        <input type="checkbox" class="check" data-act="sv-done" data-k="${ref.k}" data-p="${p.id}" ${p.savingsDone ? "checked" : ""} aria-label="Savings set aside">
+        <span class="name">Savings${notes[svk] ? `<small class="ntxt">${esc(notes[svk])}</small>` : ""}</span>
+        ${moneyInput(`svplan:${kp}`, "sv-plan", plan, `data-k="${ref.k}" data-p="${p.id}" aria-label="Savings amount"`, "0.00")}
+        ${nbtn(svk, "Savings")}
+        <span></span>
+      </li>
+    </ul>
+    <form class="addrow" data-form="slip-add" data-k="${ref.k}" data-p="${p.id}">
+      <input name="name" list="itemnames" placeholder="Add an item" autocomplete="off" aria-label="Item name" required>
+      <input name="amt" class="money" inputmode="decimal" placeholder="Amount" aria-label="Amount">
+      <button class="btn small">Add</button>
+    </form>
+    <div class="slip-foot num">
+      <div class="stat"><b>${peso(alloc)}</b><span>Allocated</span></div>
+      <div class="stat"><b>${peso(paidAmt)}</b><span>Paid ${rows.filter(i => p.paid?.[i.id]).length} of ${rows.length}</span></div>
+      <div class="stat"><b class="${left < 0 ? "neg" : "pos"}">${peso(left)}</b><span>Left over</span></div>
+    </div>
+    <div class="donebar">${isPast(ref.k)
+      ? `<span class="muted">${monthLabel(ref.k)} is over, so this payroll is view only.</span>`
+      : `<label class="optline donecheck"><input type="checkbox" class="check" data-act="pay-done" data-k="${ref.k}" data-p="${p.id}" ${p.done ? "checked" : ""}> ${p.done ? "Payroll done. You can still edit it this month." : "Mark this payroll as done"}</label>`}</div>
+  </fieldset></section>`;
+}
+
+/* ----- Months ----- */
+function viewMonths(){
+  const keys = monthKeys();
+  if (!S.monthKey) S.monthKey = thisMonth();
+  const k = S.monthKey; const m = S.months[k];
+  const nextNew = addMonth(keys[keys.length-1] || thisMonth(), 1);
+  const opts = keys.map(x => `<option value="${x}" ${x === k ? "selected" : ""}>${monthLabel(x)}</option>`).join("") +
+    (m ? "" : `<option value="${k}" selected>${monthLabel(k)}</option>`) +
+    (keys.includes(nextNew) || nextNew === k ? "" : `<option value="new:${nextNew}">Set up ${monthLabel(nextNew)}…</option>`);
+  const bar = `<div class="monthbar">
+      <button class="iconbtn" data-act="month-step" data-d="-1" aria-label="Previous month">‹</button>
+      <select data-act="month-pick" aria-label="Month">${opts}</select>
+      ${m && !isPast(k) ? `<button class="iconbtn danger-ic" data-act="month-del-ask" aria-label="Delete ${monthLabel(k)}">${trashIcon}</button>` : ""}
+      <button class="iconbtn" data-act="month-step" data-d="1" aria-label="Next month">›</button>
+    </div>
+    ${k !== thisMonth() ? `<p style="margin:-8px 4px 12px"><button class="linkbtn" data-act="month-today">Back to ${monthLabel(thisMonth())}</button></p>` : ""}`;
+  if (!m) return bar + `<div class="setup"><h3>${monthLabel(k)} isn't set up yet</h3>
+      <p class="muted">Payroll dates come from your pay schedule in Settings. Repeating items and their amounts carry over from ${keys.filter(x => x < k).length ? monthLabel(keys.filter(x => x < k).pop()) : "nothing yet"}.</p>
+      <button class="btn" data-act="month-create" data-k="${k}">Set up ${monthLabel(k)}</button></div>`;
+  const st = monthStats(m); const notes = m.notes || {};
+  const nextRef = (() => { const l = allPayrolls(); const u = l[upcomingIndex(l)]; return u && u.k === k ? u.pid : null; })();
+  const locked = isPast(k);
+  const dc = p => p.done ? " pdone" : "";
+  const heads = vis(m).map(p => `<th class="${dc(p).trim()}"><button class="colhead${p.id === nextRef ? " next" : ""}" data-act="edit-payroll" data-k="${k}" data-p="${p.id}"><b>${esc(dayLabel(p.date))}</b><span class="chip">${esc(src(p.source).short)}</span>${p.done ? `<span class="donetag">Done</span>` : ""}</button></th>`).join("");
+  const cells = fn => vis(m).map(fn).join("");
+  const cellTd = (pid, ref, inner) => {
+    const nk = `${pid}:${ref}`, ck = `${k}|${nk}`, note = notes[nk]; const pp = m.payrolls.find(x => x.id === pid);
+    return `<td class="cell${pp && pp.done ? " pdone" : ""}${note ? " hasnote" : ""}${S.activeCell === ck ? " act" : ""}" data-cell="${ck}">${inner}<button type="button" class="nb" data-act="note" data-k="${k}" data-nk="${nk}" aria-label="${note ? "Edit note" : "Add note"}"${note ? ` title="${esc(note)}"` : ""}>${noteIcon}</button></td>`;
+  };
+  const itemRows = m.items.map(i => {
+    const tot = vis(m).reduce((t,p) => t + (+i.amounts[p.id]||0), 0);
+    return `<tr><th class="rowhead"><button class="namebtn" data-act="edit-item" data-k="${k}" data-i="${i.id}">${esc(i.name)}${i.recurring === false ? `<span class="oneoff">one-off</span>` : ""}</button></th>
+      ${cells(p => cellTd(p.id, i.id, moneyInput(`cell:${k}:${p.id}:${i.id}`, "cell", i.amounts[p.id], `data-k="${k}" data-p="${p.id}" data-i="${i.id}" aria-label="${esc(i.name)}, ${esc(dayLabel(p.date))}"`)))}
+      <td class="total num">${tot ? fmt(tot) : ""}</td></tr>`;
+  }).join("");
+  return bar + `
+  <div class="sumrow num">
+    <div class="sum"><span>Saved</span><b class="pos">${peso(st.saved)}</b></div>
+    <div class="sum"><span>Projected savings</span><b class="${st.left < 0 ? "neg" : ""}">${peso(st.left)}</b></div>
+    <div class="sum"><span>Income</span><b>${peso(st.income)}</b></div>
+    <div class="sum"><span>Allocated</span><b>${peso(st.alloc)}</b></div>
+  </div>
+  <div class="zoombar" role="group" aria-label="Table zoom"><button class="zbtn" data-act="zoom" data-d="-1" aria-label="Zoom out">−</button><button class="zbtn zval" data-act="zoom-reset" aria-label="Reset zoom">${Math.round(gridZoom * 100)}%</button><button class="zbtn" data-act="zoom" data-d="1" aria-label="Zoom in">+</button></div>
+  ${locked ? `<p class="banner lockbanner">${monthLabel(k)} is over, so it's view only.</p>` : ""}
+  <div class="gridwrap" data-scroll="grid"><fieldset class="lockset" ${locked ? "disabled" : ""}><table class="grid num${locked ? " locked" : ""}" style="zoom:${gridZoom}">
+    <thead><tr><th class="rowhead">${vis(m).length} payrolls</th>${heads}<th class="total">Total</th></tr></thead>
+    <tbody>
+      <tr class="salary"><th class="rowhead">Salary</th>${cells(p => cellTd(p.id, "salary", moneyInput(`psal:${k}:${p.id}`, "p-salary", p.salary, `data-k="${k}" data-p="${p.id}" aria-label="Salary, ${esc(dayLabel(p.date))}"`)))}<td class="total">${fmt(st.income)}</td></tr>
+      <tr class="savings"><th class="rowhead">Savings</th>${cells(p => cellTd(p.id, "savings", moneyInput(`psav:${k}:${p.id}`, "p-savings", p.savings, `data-k="${k}" data-p="${p.id}" aria-label="Savings, ${esc(dayLabel(p.date))}"`)))}<td class="total pos">${fmt(st.saved)}</td></tr>
+      <tr class="left"><th class="rowhead">Projected savings</th>${cells(p => { const l = leftOf(m,p); return `<td class="${l < 0 ? "neg" : ""}${dc(p)}">${fmt(l)}</td>`; })}<td class="total">${fmt(st.left)}</td></tr>
+      ${(() => { const ch = chainTotals(totalsStart())[k]; return `<tr class="ptotal"><th class="rowhead">Projected total savings</th>${cells(() => "<td></td>")}<td class="total ptcell">${ch ? moneyInput(`mptot:${k}`, "m-ptotal", ch.proj, `data-k="${k}" ${ch.ovr ? 'data-ovr="1" title="Your own amount. Clear it to go back to automatic."' : ""} aria-label="Projected total savings for ${monthLabel(k)}"`) : `<span class="muted" title="Starts ${shortMonth(totalsStart())}">–</span>`}</td></tr>`; })()}
+      <tr class="gap"><th class="rowhead"></th>${cells(() => "<td></td>")}<td></td></tr>
+      ${itemRows || `<tr><th class="rowhead muted">No items yet</th>${cells(() => "<td></td>")}<td class="total"></td></tr>`}
+      <tr class="alloc"><th class="rowhead">Allocated</th>${cells(p => `<td class="${dc(p).trim()}">${fmt(itemsTotal(m,p.id))}</td>`)}<td class="total">${fmt(st.alloc)}</td></tr>
+    </tbody>
+  </table></fieldset></div>
+  ${locked ? notesList(m) : `<div class="gridtools">
+    <form class="addrow" data-form="month-add-item" data-k="${k}">
+      <input name="name" list="itemnames" placeholder="New item, e.g. Internet" autocomplete="off" aria-label="New item name" required>
+      <button class="btn small">Add item</button>
+    </form>
+    <button class="btn small ghost" data-act="add-payroll" data-k="${k}">Add payroll</button>
+  </div>
+  <p class="muted" style="font-size:14px;margin:0 4px">Tap a date to change or remove a payroll, or an item name to rename or delete it. Tap an amount, then the speech bubble beside it, to add a note. Projected total savings (last column) is this month's Projected savings plus last month's total. Type over it to set your own amount, or clear it to go back to automatic.</p>`}`;
+}
+
+function notesList(m){
+  const notes = Object.entries(m.notes || {}); if (!notes.length) return "";
+  const lab = nk => { const [pid, ref] = nk.split(":"); const p = m.payrolls.find(x => x.id === pid);
+    const what = ref === "salary" ? "Salary" : ref === "savings" ? "Savings" : (m.items.find(x => x.id === ref)?.name || ""); return `${what}${p ? ", " + dayLabel(p.date) : ""}`; };
+  return `<div class="card" style="margin-top:14px"><h3 style="margin-bottom:8px">Notes</h3>${notes.map(([nk, v]) => `<p class="meta" style="margin:0 0 6px"><b style="color:var(--ink)">${esc(lab(nk))}:</b> ${esc(v)}</p>`).join("")}</div>`;
+}
+
+/* ----- Dashboard ----- */
+function linkedRows(g){
+  const keys = monthKeys().filter(k => k >= g.linkFrom);
+  if (g.syncType === "item" && g.syncItem){
+    const out = [];
+    for (const k of keys){ const m = M(k); const it = findItem(m, g.syncItem); if (!it) continue;
+      let saved = 0, plan = 0;
+      for (const p of vis(m)){ const v = +it.amounts[p.id] || 0; if (!v) continue; if (p.paid?.[it.id]) saved += v; else plan += v; }
+      if (saved || plan) out.push({id:"L"+k, label:k, amount:r2(saved), projected:r2(plan), linked:true, both:true}); }
+    return out;
+  }
+  const ch = chainTotals(g.linkFrom);
+  return keys.map(k => { const st = monthStats(S.months[k]); return {id:"L"+k, label:k, amount:st.saved, projected:Math.max(st.left,0), total:ch[k] ? ch[k].proj : 0, linked:true}; });
+}
+const goalSyncLabel = g => g.syncType === "item" ? `the ${esc(g.syncItem)} item` : "your Savings row";
+function goalRows(g){ return (g.rows || []).concat(g.linkFrom ? linkedRows(g) : []).sort((a,b) => a.label.localeCompare(b.label)); }
+const chev = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>`;
+const cardBtns = (coll, c) => `<div class="hbtns"><button class="icbtn ok" data-act="card-done" data-c="${coll}" data-id="${c.id}" aria-label="Mark ${esc(c.name)} as done" title="Mark as done">${doneIcon}</button><button class="icbtn" data-act="card-edit" data-c="${coll}" data-id="${c.id}" aria-label="Edit ${esc(c.name)}" title="Edit">${pencilIcon}</button></div>`;
+const toggle = (id, label) => `<button class="toggle" data-act="toggle" data-id="${id}" aria-expanded="${!!S.open[id]}">${chev}${label}</button>`;
+function rowField(coll, cid, r, f, kind){
+  const a = `data-act="row-f" data-c="${coll}" data-id="${cid}" data-r="${r.id}" data-f="${f}"`;
+  const key = `${coll}:${cid}:${r.id}:${f}`;
+  if (kind === "month") return `<input type="month" data-key="${key}" ${a} value="${esc(r[f] || "")}" aria-label="Month">`;
+  if (kind === "date") return `<input type="date" data-key="${key}" ${a} value="${esc(r[f] || "")}" aria-label="Date">`;
+  return moneyInput(key, "row-f", r[f], `data-c="${coll}" data-id="${cid}" data-r="${r.id}" data-f="${f}" aria-label="${f}"`);
+}
+const delRow = (coll, cid, rid) => `<button class="x" data-act="row-del" data-c="${coll}" data-id="${cid}" data-r="${rid}" aria-label="Delete row">×</button>`;
+function loanSyncRows(l){
+  const out = [];
+  for (const k of monthKeys()){
+    if (l.syncFrom && k < l.syncFrom) continue;
+    const m = M(k); const it = findItem(m, l.syncItem); if (!it) continue;
+    const pids = vis(m).filter(p => +it.amounts[p.id] > 0).map(p => p.id); if (!pids.length) continue;
+    const amount = r2(pids.reduce((t, pid) => t + +it.amounts[pid], 0));
+    const paid = pids.every(pid => m.payrolls.find(p => p.id === pid).paid?.[it.id]);
+    out.push({id:"S" + k, label:k, amount, paid, synced:true, k, iid:it.id, pids});
+  }
+  return out;
+}
+const loanRows = l => l.syncItem ? loanSyncRows(l) : (l.rows || []);
+function loanFigures(l){ let bal = +l.total || 0, paidN = 0, paidAmt = 0; for (const r of loanRows(l)) if (r.paid){ bal -= +r.amount||0; paidN++; paidAmt += +r.amount||0; } return {bal, paidN, paidAmt}; }
+/* Each row's "Projected total" is the running total up to that month, so you can see when the goal is reached. */
+function goalFigures(g){
+  const rows = goalRows(g); const saved = rows.reduce((t,r) => t + (+r.amount||0), 0);
+  const chained = g.linkFrom && g.syncType !== "item";
+  let run = 0;
+  for (const r of rows){
+    if (chained && r.linked) run = r.total;
+    else run = r2(run + (r.both ? (+r.amount||0) + (+r.projected||0) : ((+r.amount||0) > 0 ? +r.amount : (+r.projected||0))));
+    r.cum = run;
+  }
+  const hit = g.target ? rows.find(r => r.cum >= g.target) : null;
+  /* Stop tracking once the goal is reached; this recalculates whenever the months change. */
+  const shown = hit ? rows.slice(0, rows.indexOf(hit) + 1) : rows;
+  const proj = shown.length ? shown[shown.length - 1].cum : 0;
+  return {rows:shown, saved:shown.reduce((t,r) => t + (+r.amount||0), 0), proj, hit, hidden:rows.length - shown.length};
+}
+function otherSyncRows(o){
+  const out = [];
+  for (const k of monthKeys().filter(x => !o.syncFrom || x >= o.syncFrom)){
+    const m = M(k); const it = findItem(m, o.syncItem); if (!it) continue;
+    let paid = 0, plan = 0;
+    for (const p of vis(m)){ const v = +it.amounts[p.id] || 0; if (!v) continue; if (p.paid?.[it.id]) paid += v; else plan += v; }
+    if (paid || plan) out.push({label:k, paid:r2(paid), plan:r2(plan)});
+  }
+  return out;
+}
+const otherTotal = o => o.syncItem ? otherSyncRows(o).reduce((t,r) => t + r.paid, 0) : (o.entries || []).reduce((t,r) => t + (+r.amount||0), 0);
+function loanCard(l){
+  let bal = +l.total || 0; const f = loanFigures(l);
+  const list = loanRows(l);
+  const rows = list.map(r => { if (r.paid) bal -= +r.amount||0;
+    if (r.synced) return `<tr><td class="lab">${shortMonth(r.label)}</td><td class="ro num">${fmt(r.amount)}</td>
+      <td class="c">${r.paid ? `<span class="pill ok">Paid</span>` : `<span class="pill">Due</span>`}</td>
+      <td class="ro num rem">${fmt(bal)}</td><td></td></tr>`;
+    return `<tr><td>${rowField("loans", l.id, r, "label", "month")}</td><td>${rowField("loans", l.id, r, "amount")}</td>
+      <td class="c"><input type="checkbox" class="check" data-act="row-paid" data-c="loans" data-id="${l.id}" data-r="${r.id}" ${r.paid ? "checked" : ""} aria-label="Paid"></td>
+      <td class="ro num rem">${fmt(bal)}</td><td>${delRow("loans", l.id, r.id)}</td></tr>`; }).join("");
+  const pct = l.total ? Math.min(100, f.paidAmt / l.total * 100) : 0;
+  return `<article class="card loan"><header><h3>${esc(l.name)}</h3>${cardBtns("loans", l)}</header>
+    <div class="figure num">${peso(f.bal)}<small>remaining of ${peso(l.total)} total loan</small></div>
+    <div class="bar" role="img" aria-label="${pct.toFixed(0)}% paid"><i class="a" style="width:${pct}%"></i></div>
+    <p class="meta num">${f.paidN} of ${list.length} payments made, ${peso(f.paidAmt)} paid</p>
+    ${l.syncItem ? `<p class="syncnote">Synced with <b>${esc(l.syncItem)}</b> in your Months tab${l.syncFrom ? ` from ${shortMonth(l.syncFrom)}` : ""}. To change a payment or mark it paid, update ${esc(l.syncItem)} in Months or on Payday.</p>` : ""}
+    ${toggle(l.id, "Monthly payments")}
+    ${S.open[l.id] ? `<div class="rowswrap"><table class="rows num"><colgroup><col class="cm"><col><col class="cp"><col class="cr"><col class="cx"></colgroup><thead><tr><th>Month</th><th>Amount</th><th style="text-align:center">Status</th><th class="rem">Remaining</th><th></th></tr></thead><tbody>${rows || `<tr><td colspan="5" class="ro" style="text-align:left">No payments yet.</td></tr>`}</tbody></table></div>
+      ${l.syncItem ? "" : `<div class="adds"><button class="btn small ghost" data-act="row-add" data-c="loans" data-id="${l.id}">Add payment</button></div>`}` : ""}
+  </article>`;
+}
+function goalCard(g){
+  const {rows, saved, proj, hit, hidden} = goalFigures(g);
+  const pA = g.target ? Math.min(100, saved/g.target*100) : 0, pB = g.target ? Math.min(100, proj/g.target*100) : 0;
+  const body = rows.map(r => r.linked
+    ? `<tr><td class="lab">${shortMonth(r.label)}</td><td class="ro num">${fmt(r.amount)}</td><td class="ro num">${fmt(r.projected)}</td><td class="ro num tot${g.target && r.cum >= g.target ? " hit" : ""}">${fmt(r.cum)}</td><td></td></tr>`
+    : `<tr><td>${rowField("goals", g.id, r, "label", "month")}</td><td>${rowField("goals", g.id, r, "amount")}</td><td>${rowField("goals", g.id, r, "projected")}</td><td class="ro num tot${g.target && r.cum >= g.target ? " hit" : ""}">${fmt(r.cum)}</td><td>${delRow("goals", g.id, r.id)}</td></tr>`).join("");
+  return `<article class="card"><header><h3>${esc(g.name)}</h3>${cardBtns("goals", g)}</header>
+    <div class="figure num">${peso(saved)}<small>saved toward ${peso(g.target)}</small></div>
+    <div class="bar" role="img" aria-label="${pA.toFixed(0)}% saved, ${pB.toFixed(0)}% projected"><i class="b" style="width:${pB}%"></i><i class="a" style="width:${pA}%"></i></div>
+    <div class="kv num"><span>Projected total <b>${peso(proj)}</b></span><span>Still to save <b>${peso(Math.max(0, g.target - saved))}</b></span></div>
+    ${g.target && rows.length ? `<p class="reach${hit ? "" : " no"}">${hit ? `On track to reach ${peso(g.target)} in <b>${monthLabel(hit.label)}</b>` : `Not reached by ${monthLabel(rows[rows.length - 1].label)} at the current plan`}</p>` : ""}
+    ${g.linkFrom ? `<p class="synced">Synced with ${goalSyncLabel(g)} in Months from ${shortMonth(g.linkFrom)}${g.syncType === "item" ? ". Paid amounts count as saved." : ""}</p>` : ""}
+    ${toggle(g.id, "Savings by month")}
+    ${S.open[g.id] ? `<div class="rowswrap goalrows"><table class="rows num"><colgroup><col class="cm"><col><col><col><col class="cx"></colgroup><thead><tr><th>Month</th><th>Saved</th><th>Projected</th><th>Projected total</th><th></th></tr></thead><tbody>${body}${hidden ? `<tr><td colspan="5" class="ro" style="text-align:left;font-size:13px">Goal reached in ${shortMonth(hit.label)}, so later months aren't tracked.</td></tr>` : ""}${body ? "" : `<tr><td colspan="5" class="ro" style="text-align:left">No entries yet.</td></tr>`}</tbody></table></div>
+      ${g.linkFrom ? "" : `<div class="adds"><button class="btn small ghost" data-act="row-add" data-c="goals" data-id="${g.id}">Add month</button></div>`}` : ""}
+  </article>`;
+}
+function otherCard(o){
+  const total = otherTotal(o); const pct = o.target ? Math.min(100, total/o.target*100) : 0;
+  let table, planned = 0;
+  if (o.syncItem){
+    const rows = otherSyncRows(o); planned = rows.reduce((t,r) => t + r.plan, 0);
+    const pill = r => !r.plan ? `<span class="pill ok">Paid</span>` : !r.paid ? `<span class="pill">Due</span>` : `<span class="pill part">Part paid</span>`;
+    table = `<table class="rows num"><colgroup><col class="cm"><col><col style="width:96px"></colgroup><thead><tr><th>Month</th><th>Amount</th><th style="text-align:center">Status</th></tr></thead><tbody>${rows.map(r => `<tr><td class="lab">${shortMonth(r.label)}</td><td class="ro num">${fmt(r.paid + r.plan)}</td><td class="c">${pill(r)}</td></tr>`).join("") || `<tr><td colspan="3" class="ro" style="text-align:left">${esc(o.syncItem)} isn't in any month yet.</td></tr>`}</tbody></table>`;
+  } else {
+    table = `<table class="rows num"><colgroup><col style="width:46%"><col><col class="cx"></colgroup><thead><tr><th>Date</th><th>Amount</th><th></th></tr></thead><tbody>${(o.entries || []).map(r => `<tr><td>${rowField("others", o.id, r, "date", "date")}</td><td>${rowField("others", o.id, r, "amount")}</td><td>${delRow("others", o.id, r.id)}</td></tr>`).join("") || `<tr><td colspan="3" class="ro" style="text-align:left">No entries yet.</td></tr>`}</tbody></table>`;
+  }
+  return `<article class="card"><header><h3>${esc(o.name)}</h3>${cardBtns("others", o)}</header>
+    <div class="figure num">${peso(total)}<small>total amount${o.target ? ` of ${peso(o.target)}` : ""}</small></div>
+    ${o.target ? `<div class="bar" role="img" aria-label="${pct.toFixed(0)}%"><i class="a" style="width:${pct}%"></i></div><p class="meta num">${peso(Math.max(0, o.target - total))} remaining${planned ? `, ${peso(planned)} still due` : ""}</p>` : planned ? `<p class="meta num">${peso(planned)} still due</p>` : ""}
+    ${o.syncItem ? `<p class="syncnote">Synced with <b>${esc(o.syncItem)}</b> in Months${o.syncFrom ? ` from ${shortMonth(o.syncFrom)}` : ""}. Payments you've ticked paid are added to the total.</p>` : ""}
+    ${toggle(o.id, o.syncItem ? "By month" : "Entries")}
+    ${S.open[o.id] ? `<div class="rowswrap">${table}</div>${o.syncItem ? "" : `<div class="adds"><button class="btn small ghost" data-act="row-add" data-c="others" data-id="${o.id}">Add entry</button></div>`}` : ""}
+  </article>`;
+}
+function doneCard(coll, c){
+  const type = coll === "loans" ? "Loan" : coll === "goals" ? "Savings goal" : "Tracker";
+  const fig = coll === "loans" ? `${peso(loanFigures(c).paidAmt)} paid of ${peso(c.total)}` : coll === "goals" ? `${peso(goalFigures(c).saved)} saved of ${peso(c.target)}` : `${peso(otherTotal(c))} total${c.target ? ` of ${peso(c.target)}` : ""}`;
+  return `<article class="card done"><header><h3>${esc(c.name)}<span class="donepill">Done</span></h3>
+    <div class="hbtns"><button class="linkbtn" data-act="card-reopen" data-c="${coll}" data-id="${c.id}">Reopen</button></div></header>
+    <p class="meta num">${type}, ${fig}${c.doneAt ? `. Completed ${esc(dayLabel(c.doneAt))}, ${c.doneAt.slice(0,4)}` : ""}</p></article>`;
+}
+function dashSection(coll, title, cardFn, addLabel, empty){
+  const live = S.dash[coll].filter(c => !c.done); const ro = S.reorder === coll;
+  const head = `<div class="sechead"><h2 class="sec">${title}</h2>${live.length > 1 ? `<button class="linkbtn" data-act="reorder" data-c="${coll}">${ro ? "Done" : "Reorder"}</button>` : ""}</div>`;
+  if (ro) return head + `<ol class="reorder">${live.map((c, i) => `<li><span>${esc(c.name)}</span>
+      <button class="icbtn" data-act="move" data-c="${coll}" data-id="${c.id}" data-d="-1" ${i === 0 ? "disabled" : ""} aria-label="Move ${esc(c.name)} up">${chevUp}</button>
+      <button class="icbtn" data-act="move" data-c="${coll}" data-id="${c.id}" data-d="1" ${i === live.length - 1 ? "disabled" : ""} aria-label="Move ${esc(c.name)} down">${chevDown}</button></li>`).join("")}</ol>`;
+  return head + (live.map(cardFn).join("") || `<p class="muted">${empty}</p>`) + `<div class="adds"><button class="btn small ghost" data-act="card-add" data-c="${coll}">${addLabel}</button></div>`;
+}
+function viewDash(){
+  const d = S.dash;
+  const done = [...d.loans.map(c => ["loans",c]), ...d.goals.map(c => ["goals",c]), ...d.others.map(c => ["others",c])].filter(([,c]) => c.done)
+    .sort((a,b) => String(b[1].doneAt||"").localeCompare(String(a[1].doneAt||"")));
+  return dashSection("goals", "Savings goals", goalCard, "Add goal", "No active goals.")
+    + dashSection("loans", "Loan progress", loanCard, "Add loan", "No active loans.")
+    + dashSection("others", "Other trackers", otherCard, "Add tracker", "Nothing here yet.")
+    + (done.length ? `<button class="donehead" data-act="toggle" data-id="__done" aria-expanded="${!!S.open.__done}">${chev}<span>Completed trackers</span><span class="count">${done.length}</span></button>
+      ${S.open.__done ? done.map(([c, x]) => doneCard(c, x)).join("") : ""}` : "");
+}
+
+
+/* ----- Charts ----- */
+let chartObjs = [];
+const SRC_COLORS = ["#E8A317", "#1B2A41", "#1F7A55", "#6C7FD8", "#B8432F", "#8A6FB0"];
+const srcColor = id => SRC_COLORS[Math.max(0, (S.settings?.sources || []).findIndex(s => s.id === id)) % SRC_COLORS.length];
+/* Chart.js is loaded by a script tag in the page head. Wait up to 15 seconds for it. */
+function loadChartJs(){
+  return new Promise((res, rej) => { let n = 0; (function check(){ if (window.Chart) return res(window.Chart); if (++n > 75) return rej(new Error("Chart.js did not load")); setTimeout(check, 200); })(); });
+}
+function destroyCharts(){ chartObjs.forEach(c => c.destroy()); chartObjs = []; }
+function chartData(){
+  const cur = thisMonth(), months = monthKeys().filter(k => k < cur);
+  const range = S.chartRange || "6";
+  const last = addMonth(cur, -1);
+  const startKey = range === "all" ? (months[0] || last) : addMonth(last, -(+range - 1));
+  const bySrc = {};
+  for (const k of months.filter(x => x >= startKey)) for (const p of vis(M(k))) (bySrc[p.source] = bySrc[p.source] || []).push(p);
+  for (const id in bySrc) bySrc[id].sort((a, b) => a.date.localeCompare(b.date));
+  const order = [...(S.settings?.sources || []).map(s => s.id), ...Object.keys(bySrc)].filter((id, i, arr) => bySrc[id] && arr.indexOf(id) === i);
+  return {months, bySrc, order};
+}
+function viewCharts(){
+  const {months, bySrc, order} = chartData();
+  if (!months.length) return `<div class="setup"><h3>No finished months yet</h3><p class="muted">Charts show months that are over. ${monthLabel(thisMonth())} will appear once it ends.</p></div>`;
+  const stats = months.map(k => monthStats(M(k)));
+  const inc = stats.reduce((t, s) => t + s.income, 0), sav = stats.reduce((t, s) => t + s.saved, 0);
+  const span = `${shortMonth(months[0])} to ${shortMonth(months[months.length - 1])}`;
+  const w = n => `min-width:max(100%, ${n * 30}px)`;
+  const range = S.chartRange || "6";
+  const sel = `<select data-chart aria-label="Period for payroll charts">${[["1","Last month"],["3","Last 3 months"],["6","Last 6 months"],["12","Last 12 months"],["all","All time"]].map(([v, l]) => `<option value="${v}" ${v === range ? "selected" : ""}>${l}</option>`).join("")}</select>`;
+  const srcCards = order.map(id => { const list = bySrc[id]; const tot = list.reduce((t, p) => t + (+p.salary || 0), 0);
+    return `<section class="chartcard">
+      <h3><i class="dot" style="background:${srcColor(id)}"></i>${esc(src(id).name)}</h3>
+      <p class="sub">${list.length} payroll${list.length === 1 ? "" : "s"}</p>
+      <div class="chartkv num"><span>Total <b>${peso(tot)}</b></span><span>Average <b>${peso(tot / list.length)}</b></span></div>
+      <div class="chartscroll" data-scroll="cs-${esc(id)}"><div class="chartin" style="${w(list.length)}"><canvas data-src="${esc(id)}" aria-label="${esc(src(id).name)} income per payroll"></canvas></div></div>
+    </section>`; }).join("");
+  return `
+  <p class="muted" style="font-size:14px;margin:4px 4px 12px">Showing finished months only, ${span}. ${monthLabel(thisMonth())} is added once it ends.</p>
+  <section class="chartcard">
+    <h3>Income per month</h3>
+    <div class="chartkv num"><span>Total <b>${peso(inc)}</b></span><span>Monthly average <b>${peso(inc / months.length)}</b></span></div>
+    <div class="chartscroll" data-scroll="c1"><div class="chartin" style="${w(months.length)}"><canvas id="c1" aria-label="Income per month"></canvas></div></div>
+  </section>
+  <section class="chartcard" >
+    <h3>Expenses per month</h3>
+    <p class="sub">Income minus what you saved. The full bar is that month's income.</p>
+    <div class="chartkv num"><span>Expenses <b>${peso(inc - sav)}</b></span><span>Saved <b class="pos">${peso(sav)}</b></span></div>
+    <div class="legend"><span><i style="background:#B8432F"></i>Expenses</span><span><i style="background:#1F7A55"></i>Saved</span></div>
+    <div class="chartscroll" data-scroll="c3"><div class="chartin" style="${w(months.length)}"><canvas id="c3" aria-label="Expenses per month"></canvas></div></div>
+  </section>
+  <div class="charthead" style="margin:22px 4px 10px;align-items:center"><div><h2 class="sec" style="margin:0">Income per payroll</h2></div>${sel}</div>
+  ${srcCards || `<p class="muted">No payrolls in this period.</p>`}`;
+}
+function drawCharts(){
+  loadChartJs().then(Chart => {
+    if (S.tab !== "charts" || !main.querySelector("#c1")) return;
+    destroyCharts();
+    const {months, bySrc} = chartData();
+    const stats = months.map(k => monthStats(M(k)));
+    const compact = v => "₱" + (Math.abs(v) >= 1000 ? (v / 1000).toLocaleString("en-PH", {maximumFractionDigits:0}) + "k" : v);
+    Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
+    Chart.defaults.color = "#5E6B7A";
+    const base = stacked => ({responsive:true, maintainAspectRatio:false, animation:false,
+      plugins:{legend:{display:false}, tooltip:{callbacks:{label:ctx => `${ctx.dataset.label ? ctx.dataset.label + ": " : ""}${peso(ctx.parsed.y || 0)}`}}},
+      scales:{x:{stacked, grid:{display:false}}, y:{stacked, beginAtZero:true, ticks:{callback:compact}, grid:{color:"#E3E8E1"}}}});
+    chartObjs.push(new Chart(main.querySelector("#c1"), {type:"bar",
+      data:{labels:months.map(shortMonth), datasets:[{label:"Income", data:stats.map(s => s.income), backgroundColor:"#1B2A41", borderRadius:6}]}, options:base(false)}));
+    main.querySelectorAll("canvas[data-src]").forEach(cv => { const id = cv.dataset.src; const list = bySrc[id] || [];
+      chartObjs.push(new Chart(cv, {type:"bar", data:{labels:list.map(p => dayLabel(p.date)), datasets:[{label:src(id).name, data:list.map(p => +p.salary || 0), backgroundColor:srcColor(id), borderRadius:5}]}, options:base(false)})); });
+    chartObjs.push(new Chart(main.querySelector("#c3"), {type:"bar",
+      data:{labels:months.map(shortMonth), datasets:[
+        {label:"Expenses", data:stats.map(s => r2(s.income - s.saved)), backgroundColor:"#B8432F", borderRadius:0},
+        {label:"Saved", data:stats.map(s => s.saved), backgroundColor:"#1F7A55", borderRadius:5}]}, options:base(true)}));
+    main.querySelectorAll(".chartscroll").forEach(sc => { if (!S.chartScrolled?.[sc.dataset.scroll]) sc.scrollLeft = sc.scrollWidth; });
+  }).catch(() => { const c = main.querySelector("#c1"); if (c) c.closest(".chartcard").insertAdjacentHTML("beforeend", `<p class="muted">Charts couldn't load. Check your connection and reopen this tab.</p>`); });
+}
+
+/* ---------- sheets ---------- */
+const dlg = $("#sheet");
+function sheet(html){ dlg.innerHTML = `<div class="sheet">${html}</div>`; if (!dlg.open){ const g = main.querySelector('[data-scroll="grid"]'); S.sheetScroll = {y:window.scrollY, gl:g ? g.scrollLeft : 0}; dlg.showModal(); } const f = dlg.querySelector("input:not([type=checkbox]),select,textarea"); f && f.focus(); }
+function restoreSheetScroll(){ const s = S.sheetScroll; if (!s) return; window.scrollTo(0, s.y); const g = main.querySelector('[data-scroll="grid"]'); if (g) g.scrollLeft = s.gl; }
+function closeSheet(){ if (!dlg.open) return; dlg.close(); restoreSheetScroll(); S.keepScroll = 1; clearTimeout(S._ks); S._ks = setTimeout(() => { S.keepScroll = 0; }, 400); }
+dlg.addEventListener("click", e => { if (e.target === dlg) closeSheet(); });
+const srcOptions = sel => S.settings.sources.map(s => `<option value="${s.id}" ${s.id === sel ? "selected" : ""}>${esc(s.name)} (${esc(s.short)})</option>`).join("");
+function repeatOptions(date){
+  const d = toDate(date);
+  return `<option value="none">Only this payroll</option>
+    <option value="monthly">Every month on the ${ordinal(d.getDate())}</option>
+    <option value="weekly">Every ${WEEKDAYS[d.getDay()]}</option>
+    <option value="dates">On dates I pick…</option>`;
+}
+function payrollSheet(k, pid){
+  S.picks = [];
+  const m = S.months[k]; const p = pid ? m.payrolls.find(x => x.id === pid) : null;
+  const first = S.settings.sources[0];
+  const date = p ? p.date : (k === thisMonth() ? todayISO() : k + "-01");
+  sheet(`<h3>${p ? "Edit payroll" : "Add payroll"}</h3>
+   <form data-form="payroll" data-k="${k}" data-p="${pid || ""}">
+    <label class="field">Date<input type="date" name="date" required value="${date}" min="${k}-01" max="${k}-${pad(lastDay(k))}"></label>
+    <label class="field">Paid by<select name="source">${srcOptions(p ? p.source : first?.id)}</select></label>
+    <label class="field">Salary<input name="salary" inputmode="decimal" value="${p ? r2(p.salary) : r2(first?.amount)}"></label>
+    ${p ? "" : `<label class="field">Repeat<select name="repeat">${repeatOptions(date)}</select></label>
+      <div class="subform" id="customDates" hidden>
+        <div class="inline2"><label class="field">Pick a date<input type="date" name="pick" min="${date}"></label><button type="button" class="btn small ghost" data-act="pick-add">Add date</button></div>
+        <div class="datechips" id="chips"><span class="muted" style="background:none;padding:0">No dates picked yet.</span></div>
+      </div>
+      <p class="muted" style="font-size:13px;margin:-6px 0 14px">Repeating payrolls are also added to the months after ${monthLabel(k)}, including months you set up later.</p>`}
+    <div class="actions">${p ? `<button type="button" class="btn danger left" data-act="del-payroll" data-k="${k}" data-p="${pid}">Delete payroll</button>` : ""}
+      <button type="button" class="btn ghost" data-act="close">Cancel</button><button class="btn">${p ? "Save" : "Add payroll"}</button></div>
+   </form>`);
+}
+S.picks = [];
+function drawChips(){ const el = dlg.querySelector("#chips"); if (!el) return; el.innerHTML = S.picks.length ? S.picks.map(d => `<span>${esc(dayLabel(d))}, ${d.slice(0,4)}<button type="button" data-act="pick-del" data-d="${d}" aria-label="Remove ${esc(dayLabel(d))}">×</button></span>`).join("") : `<span class="muted" style="background:none;padding:0">No dates picked yet.</span>`; }
+function addItemSheet(k, name){
+  const m = M(k); const existing = findItem(m, name);
+  const plist = vis(m).map(p => `<label><input type="checkbox" class="check" name="p" value="${p.id}" ${existing && existing.amounts[p.id] ? "checked" : ""}> ${esc(dayLabel(p.date))} <span class="chip">${esc(src(p.source).short)}</span></label>`).join("");
+  sheet(`<h3>${existing ? "Add to item" : "Add item"}</h3>
+   <form data-form="item-add" data-k="${k}">
+    <label class="field">Name<input name="name" required value="${esc(name)}" list="itemnames" autocomplete="off"></label>
+    <label class="field">Amount per payroll<input name="amt" inputmode="decimal" placeholder="0.00"></label>
+    <p class="flabel">Which payrolls in ${monthLabel(k)}?</p>
+    <div class="plist">${plist}<button type="button" class="linkbtn sel" data-act="plist-all">Select all</button></div>
+    <label class="optline"><input type="checkbox" class="check" name="repeat"> Repeat in the following months</label>
+    <p class="hint">Uses the same payrolls in later months. For example, the 1st UD pay or the 30th SS pay.</p>
+    <div class="actions"><button type="button" class="btn ghost" data-act="close">Cancel</button><button class="btn">Add item</button></div>
+   </form>`);
+}
+function itemSheet(k, iid){
+  const i = M(k).items.find(x => x.id === iid); const later = laterKeys(k).length;
+  sheet(`<h3>Edit item</h3>
+   <form data-form="item" data-k="${k}" data-i="${iid}">
+    <label class="field">Name<input name="name" required value="${esc(i.name)}"></label>
+    ${later ? `<label class="optline"><input type="checkbox" class="check" name="renameLater" checked> Rename in later months too</label>` : ""}
+    <label class="optline"><input type="checkbox" class="check" name="recurring" ${i.recurring === false ? "" : "checked"}> Repeat in the following months</label>
+    <p class="hint">Turning this off removes the item from every month after ${monthLabel(k)}. Turning it on copies it forward.</p>
+    <div class="actions" style="justify-content:flex-start">
+      <button type="button" class="btn small danger" data-act="del-item" data-scope="this" data-k="${k}" data-i="${iid}">Delete from ${MONTHS[+k.slice(5)-1]} only</button>
+      ${later ? `<button type="button" class="btn small danger" data-act="del-item" data-scope="later" data-k="${k}" data-i="${iid}">Delete from ${MONTHS[+k.slice(5)-1]} onward</button>` : ""}
+    </div>
+    <div class="actions"><button type="button" class="btn ghost" data-act="close">Cancel</button><button class="btn">Save</button></div>
+   </form>`);
+}
+function noteSheet(k, nk){
+  const m = M(k); const [pid, ref] = nk.split(":"); const p = m.payrolls.find(x => x.id === pid); if (!p) return;
+  const label = ref === "salary" ? "Salary" : ref === "savings" ? "Savings" : ref === "ptotal" ? "Projected total savings" : (m.items.find(i => i.id === ref)?.name || "Item");
+  const cur = (m.notes || {})[nk] || "";
+  sheet(`<h3>Note</h3>
+   <form data-form="note" data-k="${k}" data-nk="${nk}">
+    <p class="muted" style="margin:-8px 0 12px">${esc(label)}, ${esc(longDate(p.date))}</p>
+    <label class="field">Note<textarea name="note" rows="4" maxlength="500" placeholder="e.g. Paid via GCash, ref 1234">${esc(cur)}</textarea></label>
+    <div class="actions">${cur ? `<button type="button" class="btn danger left" data-act="note-del" data-k="${k}" data-nk="${nk}">Remove note</button>` : ""}
+      <button type="button" class="btn ghost" data-act="close">Cancel</button><button class="btn">Save note</button></div>
+   </form>`);
+}
+function payrollSlotOptions(key, sel){
+  const m = S.months[key]; if (!m) return `<option value="">Set up ${monthLabel(key)} first</option>`;
+  return vis(m).map(p => `<option value="${p.id}" ${p.id === sel ? "selected" : ""}>${esc(dayLabel(p.date))}, ${esc(src(p.source).name)}</option>`).join("");
+}
+function loanSheet(id){
+  const c = id ? S.dash.loans.find(x => x.id === id) : null;
+  const from = c?.syncFrom || thisMonth(); const synced = c ? !!c.syncItem : true;
+  sheet(`<h3>${c ? "Edit loan" : "Add loan"}</h3>
+   <form data-form="loan" data-id="${id || ""}">
+    <label class="field">Name<input name="name" required value="${esc(c?.name || "")}"></label>
+    <label class="field">Total loan<input name="amt" inputmode="decimal" value="${c?.total ? r2(c.total) : ""}"></label>
+    <p class="flabel">Payments come from an item in your Months tab. Mark it paid on Payday or in Months.</p>
+    <input type="hidden" name="sync" value="1">
+    <div class="subform" id="syncBox">
+      <label class="field">Item name<input name="item" list="itemnames" autocomplete="off" required value="${esc(c?.syncItem || "")}" placeholder="e.g. EW"></label>
+      <label class="field">Starting month<input type="month" name="from" value="${from}"></label>
+      <label class="field">Monthly payment<input name="pay" inputmode="decimal" placeholder="Leave blank if the item is already in your months"></label>
+      <label class="field">Pay from which payroll<select name="payroll">${payrollSlotOptions(from)}</select></label>
+      <p class="muted" style="font-size:13px;margin:-4px 0 12px">If you enter a monthly payment, the item is added to each month until the total is paid, on the matching payroll (for example the 30th SS pay). Months that already have the item are left as they are.</p>
+    </div>
+    <div class="actions">${c ? `<button type="button" class="btn danger left" data-act="card-del" data-c="loans" data-id="${id}">Delete</button>` : ""}
+      <button type="button" class="btn ghost" data-act="close">Cancel</button><button class="btn">${c ? "Save" : "Add loan"}</button></div>
+   </form>`);
+}
+function goalSheet(id){
+  const c = id ? S.dash.goals.find(x => x.id === id) : null;
+  const mode = c ? (c.linkFrom ? (c.syncType === "item" ? "item" : "savings") : "manual") : "savings";
+  sheet(`<h3>${c ? "Edit savings goal" : "Add savings goal"}</h3>
+   <form data-form="goal" data-id="${id || ""}">
+    <label class="field">Name<input name="name" required value="${esc(c?.name || "")}"></label>
+    <label class="field">Goal amount<input name="amt" inputmode="decimal" value="${c?.target ? r2(c.target) : ""}"></label>
+    <label class="field">Sync with<select name="mode">
+      <option value="savings" ${mode === "savings" ? "selected" : ""}>Savings row in Months</option>
+      <option value="item" ${mode === "item" ? "selected" : ""}>An item in Months</option>
+      ${mode === "manual" ? `<option value="manual" selected>Nothing, I enter it by month</option>` : ""}</select></label>
+    <label class="field" id="goalItem" ${mode === "item" ? "" : "hidden"}>Item name<input name="item" list="itemnames" autocomplete="off" value="${esc(c?.syncItem || "")}" placeholder="e.g. MP2 Savings"></label>
+    <label class="field" id="goalFrom" ${mode === "manual" ? "hidden" : ""}>Starting month<input type="month" name="from" value="${esc(c?.linkFrom || thisMonth())}"></label>
+    <p class="muted" id="goalHint" style="font-size:13px;margin:-4px 0 12px">${mode === "item" ? "Amounts of that item you've ticked paid count as saved. Unpaid ones count as projected." : mode === "savings" ? "Each month's Saved total counts toward this goal, and Projected savings shows what's still planned." : "You type in each month's amount yourself."}</p>
+    <div class="actions">${c ? `<button type="button" class="btn danger left" data-act="card-del" data-c="goals" data-id="${id}">Delete</button>` : ""}
+      <button type="button" class="btn ghost" data-act="close">Cancel</button><button class="btn">${c ? "Save" : "Add goal"}</button></div>
+   </form>`);
+}
+function trackerSheet(id){
+  const c = id ? S.dash.others.find(x => x.id === id) : null; const mode = c?.syncItem ? "item" : "manual";
+  sheet(`<h3>${c ? "Edit tracker" : "Add tracker"}</h3>
+   <form data-form="tracker" data-id="${id || ""}">
+    <label class="field">Name<input name="name" required value="${esc(c?.name || "")}"></label>
+    <label class="field">Target amount (optional)<input name="amt" inputmode="decimal" value="${c?.target ? r2(c.target) : ""}"></label>
+    <label class="field">Amounts come from<select name="mode">
+      <option value="manual" ${mode === "manual" ? "selected" : ""}>I add them myself</option>
+      <option value="item" ${mode === "item" ? "selected" : ""}>An item in Months</option></select></label>
+    <div id="trkSync" ${mode === "item" ? "" : "hidden"}>
+      <label class="field">Item name<input name="item" list="itemnames" autocomplete="off" value="${esc(c?.syncItem || "")}" placeholder="e.g. Shero Payroll"></label>
+      <label class="field">Starting month<input type="month" name="from" value="${esc(c?.syncFrom || thisMonth())}"></label>
+      <p class="muted" style="font-size:13px;margin:-4px 0 12px">Each month shows the item's amount and whether it's paid. Paid amounts are added to the total.</p>
+    </div>
+    <div class="actions">${c ? `<button type="button" class="btn danger left" data-act="card-del" data-c="others" data-id="${id}">Delete</button>` : ""}
+      <button type="button" class="btn ghost" data-act="close">Cancel</button><button class="btn">${c ? "Save" : "Add tracker"}</button></div>
+   </form>`);
+}
+function cardSheet(coll, id){
+  if (coll === "loans") return loanSheet(id);
+  if (coll === "goals") return goalSheet(id);
+  if (coll === "others") return trackerSheet(id);
+  const c = id ? S.dash[coll].find(x => x.id === id) : null;
+  const amtLabel = coll === "loans" ? "Total loan" : coll === "goals" ? "Goal amount" : "Target amount (optional)";
+  const amt = c ? (coll === "loans" ? c.total : c.target) : "";
+  sheet(`<h3>${c ? "Edit" : "Add"} ${coll === "loans" ? "loan" : coll === "goals" ? "savings goal" : "tracker"}</h3>
+   <form data-form="card" data-c="${coll}" data-id="${id || ""}">
+    <label class="field">Name<input name="name" required value="${esc(c?.name || "")}"></label>
+    <label class="field">${amtLabel}<input name="amt" inputmode="decimal" value="${amt ? r2(amt) : ""}"></label>
+    ${coll === "goals" ? `<label class="field">Sync with Months tab from (optional)<input type="month" name="link" value="${esc(c?.linkFrom || "")}"></label>` : ""}
+    <div class="actions">${c ? `<button type="button" class="btn danger left" data-act="card-del" data-c="${coll}" data-id="${id}">Delete</button>` : ""}
+      <button type="button" class="btn ghost" data-act="close">Cancel</button><button class="btn">${c ? "Save" : "Add"}</button></div>
+   </form>`);
+}
+function monthDelSheet(k){
+  sheet(`<h3>Delete ${monthLabel(k)}?</h3>
+    <p class="muted">This removes the month's payrolls, items, notes and savings from the tracker. It can't be undone.</p>
+    <div class="actions"><button class="btn ghost" data-act="close">Cancel</button><button class="btn danger" data-act="month-del" data-k="${k}">Delete ${monthLabel(k)}</button></div>`);
+}
+const ruleText = r => `${r.schedule === "weekly" ? `Every ${WEEKDAYS[r.weekday]}` : r.schedule === "dates" ? `On ${(r.dates || []).map(x => dayLabel(x) + " " + x.slice(0,4)).join(", ")}` : `Every month on the ${ordinal(+r.day)}`}, ${src(r.source).short}, ${peso(r.amount)}, from ${shortMonth(r.from)}`;
+function settingsSheet(){
+  if (!S._srcDraft) S._srcDraft = clone(S.settings.sources);
+  const rows = S._srcDraft.map((s,i) => `<div class="srcrow${s.enabled === false ? " paused" : ""}">
+    <label class="optline" style="margin:0 0 8px"><input type="checkbox" class="check" name="on-${i}" ${s.enabled === false ? "" : "checked"}> <b>Active</b>${s.enabled === false ? `<span class="muted" style="font-size:13px">Paused${s.offFrom ? ` from ${shortMonth(s.offFrom)}` : ""}</span>` : ""}</label>
+    <div class="two"><label class="field">Name<input name="name-${i}" value="${esc(s.name)}" required></label><label class="field">Short label<input name="short-${i}" value="${esc(s.short)}" maxlength="5"></label></div>
+    <div class="two"><label class="field">Schedule<select name="schedule-${i}" data-sched="${i}">
+        <option value="weekly" ${s.schedule === "weekly" ? "selected" : ""}>Every week</option>
+        <option value="semimonthly" ${s.schedule === "semimonthly" ? "selected" : ""}>15th and 30th</option>
+        <option value="monthly" ${s.schedule === "monthly" ? "selected" : ""}>Once a month</option></select></label>
+      <label class="field">Usual amount<input name="amount-${i}" inputmode="decimal" value="${r2(s.amount)}"></label></div>
+    <div class="two"><label class="field">Weekly payday<select name="weekday-${i}" ${s.schedule === "weekly" ? "" : "disabled"}>${WEEKDAYS.map((d,j) => `<option value="${j}" ${(s.weekday ?? 1) == j ? "selected" : ""}>${d}</option>`).join("")}</select></label>
+      <label class="field">Monthly pay day<input name="day-${i}" inputmode="numeric" value="${s.day || 30}" ${s.schedule === "monthly" ? "" : "disabled"}></label></div>
+    <div class="actions" style="margin:-4px 0 10px"><button type="button" class="linkbtn danger" data-act="src-del" data-i="${i}">Remove this income</button></div>
+  </div>`).join("");
+  const rules = S.settings.extraPayrolls || [];
+  sheet(`<h3>Settings</h3>
+   <form data-form="settings">
+    <p class="muted" style="margin-top:0;font-size:14px">Your pay schedule. Changing a usual amount updates upcoming payrolls from today onward, except ones you've changed by hand in Months. Changing a salary in Months only changes that payroll. Untick Active to pause an income from next month onward. Its payrolls are hidden, and ticking it again brings them back.</p>
+    ${rows}
+    <div class="actions" style="justify-content:flex-start"><button type="button" class="btn small ghost" data-act="src-add">Add income</button></div>
+    ${rules.length ? `<p class="flabel" style="margin-top:18px">Repeating payrolls you added</p><ul class="rulelist">${rules.map(r => `<li><span>${esc(ruleText(r))}</span><button type="button" class="linkbtn danger" data-act="rule-del" data-id="${r.id}">Stop repeating</button></li>`).join("")}</ul>` : ""}
+    <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+    <p class="muted" style="font-size:14px;margin:0 0 10px">Your data is saved on this phone and synced to your <b>Sahod data</b> spreadsheet in Google Drive. Each month also gets its own readable tab there. ${dirtyCount() ? `<b>${dirtyCount()} change${dirtyCount() === 1 ? "" : "s"} waiting to sync.</b>` : ""}</p>
+    <div class="actions" style="justify-content:flex-start;flex-wrap:wrap">
+      <button type="button" class="btn small ghost" data-act="sync-now">${tokenValid() ? "Sync now" : "Sign in and sync"}</button>
+      <button type="button" class="btn small ghost" data-act="open-sheet">Open in Google Sheets</button>
+      <label class="btn small ghost" style="cursor:pointer">Import data (.json)<input type="file" accept=".json,application/json" id="importFile" hidden></label>
+    </div>
+    <div class="actions" style="justify-content:flex-start;margin-top:4px">
+      ${tokenValid() ? `<button type="button" class="linkbtn" data-act="sign-out">Sign out of Google</button>` : ""}
+      <button type="button" class="linkbtn danger" data-act="disconnect">Disconnect spreadsheet</button>
+    </div>
+    <div class="actions"><button type="button" class="btn ghost" data-act="close">Cancel</button><button class="btn">Save schedule</button></div>
+   </form>`);
+}
+function readSettingsForm(){
+  const f = dlg.querySelector('form[data-form="settings"]'); if (!f) return; const fd = new FormData(f);
+  S._srcDraft = S._srcDraft.map((s, i) => !fd.has(`name-${i}`) ? s : ({...s,
+    enabled:fd.has(`on-${i}`) ? undefined : false,
+    name:fd.get(`name-${i}`).trim() || s.name, short:fd.get(`short-${i}`).trim() || s.short, schedule:fd.get(`schedule-${i}`), amount:parseNum(fd.get(`amount-${i}`)),
+    weekday:fd.has(`weekday-${i}`) ? +fd.get(`weekday-${i}`) : (s.weekday ?? 1),
+    day:fd.has(`day-${i}`) ? Math.min(31, Math.max(1, parseInt(fd.get(`day-${i}`)) || 30)) : (s.day || 30)}));
+}
+dlg.addEventListener("close", () => { S._srcDraft = null; });
+
+/* ---------- actions ---------- */
+const M = k => S.months[k];
+const P = (k,p) => M(k).payrolls.find(x => x.id === p);
+const touch = k => { save("m-" + k); render(); };
+const dashTouch = () => { save("dashboard"); render(); };
+function findRow(coll, id, rid){ const c = S.dash[coll].find(x => x.id === id); const list = coll === "others" ? c.entries : c.rows; return {c, list, row:list.find(r => r.id === rid)}; }
+let toastT;
+function toast(t){ let el = $(".toast"); if (!el){ el = document.createElement("div"); el.className = "toast"; el.setAttribute("role","status"); document.body.appendChild(el); } el.textContent = t; clearTimeout(toastT); toastT = setTimeout(() => el.remove(), 2800); }
+function arm(b, label){ if (b.dataset.armed) return true; b.dataset.armed = "1"; b.textContent = label || "Tap again to confirm"; return false; }
+
+document.addEventListener("focusin", e => {
+  const el = e.target; if (!el.matches) return;
+  if (el.matches("input[data-money]")){ el.value = el.dataset.raw; requestAnimationFrame(() => el.select && el.select()); }
+  const td = el.closest && el.closest("td.cell");
+  if (td && main.contains(td)){ main.querySelectorAll("td.cell.act").forEach(x => x !== td && x.classList.remove("act")); td.classList.add("act"); S.activeCell = td.dataset.cell; }
+});
+document.addEventListener("focusout", e => { const el = e.target;
+  if (el.matches && el.matches("input[data-money]")){ const v = parseNum(el.value); if (String(v || "") === String(el.dataset.raw || "") || (!el.value && !el.dataset.raw)) el.value = v ? fmt(v) : ""; }
+  if (S.deferred) setTimeout(() => { if (!editing()){ S.deferred = false; render(); } }, 0);
+});
+document.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.matches && e.target.matches("main input[data-money], main .rows input")) { e.preventDefault(); e.target.blur(); } });
+document.addEventListener("input", e => {
+  const el = e.target;
+  if (el.matches && el.matches('form[data-form="payroll"] input[name="date"]') && el.value){ const sel = el.form.querySelector('select[name="repeat"]'); if (sel){ const v = sel.value; sel.innerHTML = repeatOptions(el.value); sel.value = v; } }
+});
+
+document.addEventListener("change", e => {
+  const el = e.target;
+  if (el.id === "importFile" && el.files && el.files[0]){
+    const file = el.files[0]; const reader = new FileReader();
+    reader.onload = async () => {
+      let data; try { data = JSON.parse(reader.result); } catch(err){ toast("That file isn't valid Sahod data."); return; }
+      const docs = data.docs || data; const n = Object.keys(docs).length;
+      if (!n || !confirm(`Import ${n} items from ${file.name}? This replaces matching months, the dashboard and settings.`)) return;
+      closeSheet();
+      const local = LS.get(K_DOCS, {}); Object.assign(local, docs); LS.set(K_DOCS, local);
+      loadLocal(); ensureDefaults(); for (const id of Object.keys(docs)) save(id);
+      render(); toast(`Imported ${n} items. Syncing to Google Sheets.`);
+    };
+    reader.readAsText(file); return;
+  }
+  if (el.matches && el.matches('form[data-form="payroll"] select[name="repeat"]')){ const box = dlg.querySelector("#customDates"); if (box) box.hidden = el.value !== "dates"; return; }
+  if (el.matches && el.matches('form[data-form="tracker"] select[name="mode"]')){ dlg.querySelector("#trkSync").hidden = el.value !== "item"; return; }
+  if (el.matches && el.matches('form[data-form="goal"] select[name="mode"]')){
+    dlg.querySelector("#goalItem").hidden = el.value !== "item"; dlg.querySelector("#goalFrom").hidden = el.value === "manual";
+    dlg.querySelector("#goalHint").textContent = el.value === "item" ? "Amounts of that item you've ticked paid count as saved. Unpaid ones count as projected." : el.value === "savings" ? "Each month's Saved total counts toward this goal, and Projected savings shows what's still planned." : "You type in each month's amount yourself.";
+    return; }
+  if (el.matches && el.matches('form[data-form="loan"] input[name="sync"]')){ dlg.querySelector("#syncBox").hidden = !el.checked; return; }
+  if (el.matches && el.matches('form[data-form="loan"] input[name="from"]')){ const sel = dlg.querySelector('select[name="payroll"]'); if (sel) sel.innerHTML = payrollSlotOptions(el.value); return; }
+  if (el.matches && el.matches("select[data-chart]")){ S.chartRange = el.value; render(); return; }
+  if (el.matches && el.matches("select[data-sched]")){
+    const i = el.dataset.sched, f = el.form;
+    f.querySelector(`[name="weekday-${i}"]`).disabled = el.value !== "weekly";
+    f.querySelector(`[name="day-${i}"]`).disabled = el.value !== "monthly";
+    return;
+  }
+  const a = el.dataset && el.dataset.act; if (!a) return;
+  const {k, p, i} = el.dataset;
+  if (k && isPast(k) && ["cell","paid","p-salary","p-savings","sv-plan","sv-done","m-ptotal","pay-done"].includes(a)){ toast(`${monthLabel(k)} is over and can't be edited.`); render(); return; }
+  if (a === "pay-done"){ const pr = P(k,p); if (el.checked) pr.done = true; else delete pr.done; if (el.checked){ S.slipRef = {k, pid:p}; toast(`${dayLabel(pr.date)} payroll marked done`); } touch(k); return; }
+  if (a === "cell"){ const it = M(k).items.find(x => x.id === i); const v = parseNum(el.value); el.dataset.raw = v || ""; if (v) it.amounts[p] = v; else if (S.tab === "payday") it.amounts[p] = 0; else delete it.amounts[p]; touch(k); }
+  else if (a === "paid"){ const pr = P(k,p); pr.paid = pr.paid || {}; if (el.checked) pr.paid[i] = true; else delete pr.paid[i]; touch(k); }
+  else if (a === "m-ptotal"){ const m = M(k); if (String(el.value).trim() === "") delete m.projTotal; else m.projTotal = parseNum(el.value); touch(k); }
+  else if (a === "p-salary"){ P(k,p).salary = parseNum(el.value); touch(k); }
+  else if (a === "p-savings"){ const pr = P(k,p); pr.savings = parseNum(el.value); pr.savingsDone = pr.savings > 0; if (pr.savingsDone) delete pr.savingsPlan; touch(k); }
+  else if (a === "sv-plan"){ const pr = P(k,p); const v = parseNum(el.value); if (pr.savingsDone) pr.savings = v; else pr.savingsPlan = v; touch(k); }
+  else if (a === "sv-done"){ const pr = P(k,p); const m = M(k);
+    if (el.checked){ const v = pr.savingsPlan ?? Math.max(leftOf(m, pr), 0); pr.savings = r2(v); pr.savingsDone = true; delete pr.savingsPlan; toast(`${peso(pr.savings)} added to savings for ${dayLabel(pr.date)}`); }
+    else { pr.savingsPlan = pr.savings; pr.savings = 0; pr.savingsDone = false; }
+    touch(k); }
+  else if (a === "month-pick"){ const v = el.value; if (v.startsWith("new:")){ createMonth(v.slice(4)); S.monthKey = v.slice(4); } else S.monthKey = v; render(); }
+  else if (a === "row-f"){ const {c, id, r, f} = el.dataset; const {row} = findRow(c, id, r); row[f] = (f === "label" || f === "date") ? el.value : parseNum(el.value); dashTouch(); }
+  else if (a === "lrow-paid"){ const m = M(k); for (const pid of el.dataset.pids.split(",")){ const pr = P(k, pid); pr.paid = pr.paid || {}; if (el.checked) pr.paid[i] = true; else delete pr.paid[i]; } touch(k); }
+  else if (a === "lrow-amt"){ const m = M(k); const it = m.items.find(x => x.id === i); const pids = el.dataset.pids.split(","); const v = parseNum(el.value);
+    const others = pids.slice(1).reduce((t, pid) => t + (+it.amounts[pid] || 0), 0); it.amounts[pids[0]] = r2(Math.max(0, v - others)); touch(k); }
+  else if (a === "row-paid"){ const {c, id, r} = el.dataset; findRow(c, id, r).row.paid = el.checked; dashTouch(); }
+});
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if (!b || b.tagName === "INPUT" || b.tagName === "SELECT") return;
+  const a = b.dataset.act, {k, p, i} = b.dataset;
+  switch (a){
+    case "tab": S.reorder = null; S.tab = b.dataset.tab; if (S.tab === "payday") S.slipRef = null; if (S.tab === "months") S.monthKey = null; window.scrollTo(0,0); render(); break;
+    case "settings": settingsSheet(); break;
+    case "close": closeSheet(); break;
+    case "slip": { const list = allPayrolls(); const n = list[S.slipIdx + +b.dataset.d]; if (n) S.slipRef = {k:n.k, pid:n.pid}; render(); break; }
+    case "slip-up": S.slipRef = null; render(); break;
+    case "unassign": if (isPast(k)) break; { const it = M(k).items.find(x => x.id === i); delete it.amounts[p]; const pr = P(k,p); if (pr.paid) delete pr.paid[i]; touch(k); break; }
+    case "note": noteSheet(k, b.dataset.nk); break;
+    case "pick-add": { const inp = dlg.querySelector('input[name="pick"]'); const v = inp && inp.value; const base = dlg.querySelector('input[name="date"]').value;
+      if (!v){ toast("Choose a date first."); break; } if (v <= base){ toast("Pick a date after the first payroll."); break; }
+      if (!S.picks.includes(v)) S.picks.push(v); S.picks.sort(); inp.value = ""; drawChips(); break; }
+    case "pick-del": S.picks = S.picks.filter(x => x !== b.dataset.d); drawChips(); break;
+    case "note-del": { const m = M(k); if (m.notes) delete m.notes[b.dataset.nk]; closeSheet(); touch(k); break; }
+    case "month-step": { const keys = monthKeys(); const d = +b.dataset.d; const n = addMonth(S.monthKey, d); if (d < 0 && keys.length && n < keys[0]) break; S.monthKey = n; render(); break; }
+    case "month-today": S.monthKey = thisMonth(); render(); break;
+    case "zoom": setZoom(gridZoom + 0.1 * +b.dataset.d); break;
+    case "zoom-reset": setZoom(1); break;
+    case "month-create": createMonth(k); render(); break;
+    case "month-del-ask": monthDelSheet(S.monthKey); break;
+    case "month-del": delete S.months[k]; save("m-" + k); closeSheet(); S.slipRef = null; toast(`${monthLabel(k)} deleted`); render(); break;
+    case "edit-payroll": if (isPast(k)) break; payrollSheet(k, p); break;
+    case "add-payroll": payrollSheet(k, null); break;
+    case "del-payroll": if (arm(b, "Tap again to delete")){ const m = M(k); m.payrolls = m.payrolls.filter(x => x.id !== p); m.items.forEach(it => delete it.amounts[p]); if (m.notes) for (const nk of Object.keys(m.notes)) if (nk.startsWith(p + ":")) delete m.notes[nk]; closeSheet(); S.slipRef = null; touch(k); } break;
+    case "edit-item": if (isPast(k)) break; itemSheet(k, i); break;
+    case "plist-all": { const boxes = [...dlg.querySelectorAll('.plist input[name="p"]')]; const all = boxes.every(x => x.checked); boxes.forEach(x => x.checked = !all); b.textContent = all ? "Select all" : "Clear all"; break; }
+    case "del-item": if (arm(b, "Tap again to delete")){
+        const m = M(k); const it = m.items.find(x => x.id === i); const name = it.name;
+        dropItem(m, it); if (b.dataset.scope === "later") removeLater(k, name);
+        closeSheet(); touch(k); toast(b.dataset.scope === "later" ? `${name} removed from ${monthLabel(k)} onward` : `${name} removed from ${monthLabel(k)}`);
+      } break;
+    case "toggle": S.open[b.dataset.id] = !S.open[b.dataset.id]; render(); break;
+    case "card-edit": cardSheet(b.dataset.c, b.dataset.id); break;
+    case "reorder": S.reorder = S.reorder === b.dataset.c ? null : b.dataset.c; render(); break;
+    case "move": { const list = S.dash[b.dataset.c]; const live = list.filter(c => !c.done); const i = live.findIndex(c => c.id === b.dataset.id); const other = live[i + +b.dataset.d]; if (!other) break;
+      const a1 = list.indexOf(live[i]), a2 = list.indexOf(other); [list[a1], list[a2]] = [list[a2], list[a1]]; dashTouch(); break; }
+    case "card-add": cardSheet(b.dataset.c, null); break;
+    case "card-done": { const c = S.dash[b.dataset.c].find(x => x.id === b.dataset.id); c.done = true; delete c.keepOpen; c.doneAt = todayISO(); toast(`${c.name} moved to Completed trackers`); dashTouch(); break; }
+    case "card-reopen": { const c = S.dash[b.dataset.c].find(x => x.id === b.dataset.id); delete c.done; delete c.doneAt; if (c.autoDone){ c.keepOpen = true; delete c.autoDone; } dashTouch(); break; }
+    case "card-del": if (arm(b, "Tap again to delete")){ S.dash[b.dataset.c] = S.dash[b.dataset.c].filter(x => x.id !== b.dataset.id); closeSheet(); dashTouch(); } break;
+    case "row-add": { const c = S.dash[b.dataset.c].find(x => x.id === b.dataset.id); const coll = b.dataset.c;
+      const list = coll === "others" ? (c.entries = c.entries || []) : (c.rows = c.rows || []);
+      const last = list[list.length-1]; const rid = "r" + uid6();
+      if (coll === "others") list.push({id:rid, date:todayISO(), amount:last ? last.amount : 0});
+      else list.push({id:rid, label:last && last.label ? addMonth(last.label, 1) : thisMonth(), amount:coll === "loans" && last ? last.amount : 0, projected:last ? last.projected || 0 : 0, paid:false});
+      S.open[c.id] = true; dashTouch(); break; }
+    case "row-del": { const {list, row} = findRow(b.dataset.c, b.dataset.id, b.dataset.r); list.splice(list.indexOf(row), 1); dashTouch(); break; }
+    case "src-add": readSettingsForm(); S._srcDraft.push({id:"s" + uid6(), name:"New income", short:"NEW", schedule:"monthly", day:30, amount:0}); settingsSheet(); break;
+    case "src-del": readSettingsForm(); S._srcDraft.splice(+b.dataset.i, 1); settingsSheet(); break;
+    case "rule-del": readSettingsForm(); S.settings.extraPayrolls = (S.settings.extraPayrolls || []).filter(r => r.id !== b.dataset.id); save("settings"); settingsSheet(); toast("Stopped repeating. Existing payrolls stay."); break;
+    case "open-sheet": window.open("https:" + "//docs.google.com/spreadsheets/d/" + sheetId() + "/edit", "_blank"); break;
+  }
+});
+
+document.addEventListener("submit", e => {
+  const f = e.target; const t = f.dataset.form; if (!t) return; e.preventDefault();
+  const fd = new FormData(f); const {k, p, i} = f.dataset;
+  if (t === "slip-add"){
+    const name = String(fd.get("name") || "").trim(); if (!name) return;
+    const m = M(k); let it = findItem(m, name);
+    if (!it){ it = {id:newId(m.items, "i"), name, amounts:{}}; m.items.push(it); }
+    it.amounts[p] = parseNum(fd.get("amt")); touch(k);
+  }
+  else if (t === "month-add-item"){ const name = String(fd.get("name") || "").trim(); if (name) addItemSheet(k, name); }
+  else if (t === "item-add"){
+    const name = String(fd.get("name") || "").trim(); const amt = parseNum(fd.get("amt")); const pids = fd.getAll("p");
+    if (!name) return; if (!pids.length){ toast("Pick at least one payroll."); return; }
+    const m = M(k); let it = findItem(m, name);
+    if (!it){ it = {id:newId(m.items, "i"), name, amounts:{}}; m.items.push(it); }
+    const amounts = {}; for (const pid of pids){ it.amounts[pid] = amt; amounts[pid] = amt; }
+    const repeat = !!fd.get("repeat");
+    if (repeat){ delete it.recurring; forwardItem(k, name, amounts, false); } else it.recurring = false;
+    closeSheet(); touch(k); f.reset?.();
+    toast(repeat && laterKeys(k).length ? `${name} added to ${monthLabel(k)} and later months` : `${name} added to ${monthLabel(k)}`);
+  }
+  else if (t === "payroll"){
+    const m = M(k); const date = fd.get("date"); if (!date || !date.startsWith(k)) { toast(`Pick a date in ${monthLabel(k)}.`); return; }
+    const source = fd.get("source"), salary = parseNum(fd.get("salary"));
+    if (p){ const pr = P(k,p); pr.date = date; pr.source = source; pr.salary = salary; m.payrolls.sort((a,b) => a.date.localeCompare(b.date)); }
+    else {
+      const repeat = fd.get("repeat") || "none";
+      if (repeat === "dates" && !S.picks.length){ toast("Pick at least one date, or choose another repeat option."); return; }
+      if (!addPayrollTo(m, date, source, salary)){ toast("That payroll already exists."); return; }
+      if (repeat !== "none"){
+        const d = toDate(date); const rule = {id:"x" + uid6(), source, schedule:repeat, weekday:d.getDay(), day:d.getDate(), amount:salary, from:k};
+        if (repeat === "dates") rule.dates = [...S.picks].sort();
+        if (repeat === "weekly") for (const d2 of ruleDates(rule, k)) if (d2 > date) addPayrollTo(m, d2, source, salary);
+        for (const k2 of laterKeys(k)){ const m2 = M(k2); let added = false; for (const d2 of ruleDates(rule, k2)) if (addPayrollTo(m2, d2, source, salary)) added = true; if (added) save("m-" + k2); }
+        S.settings.extraPayrolls = [...(S.settings.extraPayrolls || []), rule]; save("settings");
+        toast(repeat === "dates" ? `Payroll added on ${rule.dates.length + 1} dates` : `Payroll added ${repeat === "weekly" ? `every ${WEEKDAYS[d.getDay()]}` : `every ${ordinal(d.getDate())}`}`);
+      }
+    }
+    closeSheet(); S.slipRef = null; touch(k);
+  }
+  else if (t === "item"){
+    const m = M(k); const it = m.items.find(x => x.id === i); const oldName = it.name;
+    const name = String(fd.get("name")).trim() || oldName;
+    if (name !== oldName && fd.get("renameLater")) for (const k2 of laterKeys(k)){ const it2 = findItem(M(k2), oldName); if (it2){ it2.name = name; save("m-" + k2); } }
+    it.name = name;
+    const was = it.recurring !== false, now = !!fd.get("recurring");
+    if (was && !now){ it.recurring = false; removeLater(k, name); toast(`${name} won't repeat after ${monthLabel(k)}`); }
+    else if (!was && now){ delete it.recurring; forwardItem(k, name, it.amounts, true); toast(`${name} copied to later months`); }
+    closeSheet(); touch(k);
+  }
+  else if (t === "note"){
+    const m = M(k); m.notes = m.notes || {}; const v = String(fd.get("note") || "").trim();
+    if (v) m.notes[f.dataset.nk] = v; else delete m.notes[f.dataset.nk];
+    closeSheet(); touch(k);
+  }
+  else if (t === "loan"){
+    const id = f.dataset.id; const name = String(fd.get("name")).trim(); const total = parseNum(fd.get("amt"));
+    let c = id ? S.dash.loans.find(x => x.id === id) : null;
+    if (!c){ c = {id:"l" + uid6(), name, rows:[]}; S.dash.loans.push(c); S.open[c.id] = true; }
+    c.name = name; c.total = total;
+    if (fd.get("sync")){
+      const item = String(fd.get("item") || "").trim(); if (!item){ toast("Enter the item name to sync with."); return; }
+      const from = fd.get("from") || thisMonth(); const pay = parseNum(fd.get("pay")); const slot = fd.get("payroll");
+      c.syncItem = item; c.syncFrom = from;
+      if (pay > 0 && slot && M(from)){
+        const n = total > 0 ? Math.ceil(total / pay) : 12; const until = addMonth(from, n - 1); const base = M(from); let added = 0;
+        for (const k2 of monthKeys().filter(x => x >= from && x <= until)){
+          const m2 = M(k2); let it = findItem(m2, item);
+          if (it && Object.values(it.amounts).some(v => +v > 0)) continue;
+          const pid = k2 === from ? slot : mapPid(base, slot, m2); if (!pid) continue;
+          if (!it){ it = {id:newId(m2.items, "i"), name:item, amounts:{}}; m2.items.push(it); }
+          it.amounts[pid] = pay; it.until = until; delete it.recurring; save("m-" + k2); added++;
+        }
+        toast(added ? `${item} added to ${added} month${added === 1 ? "" : "s"}, through ${shortMonth(until)}` : `Linked to ${item}`);
+      }
+    } else if (c.syncItem){
+      c.rows = loanSyncRows(c).map(r => ({id:"r" + uid6(), label:r.label, amount:r.amount, paid:r.paid}));
+      delete c.syncItem; delete c.syncFrom;
+    }
+    closeSheet(); dashTouch();
+  }
+  else if (t === "tracker"){
+    const id = f.dataset.id; const name = String(fd.get("name")).trim(); const mode = fd.get("mode"); const item = String(fd.get("item") || "").trim();
+    if (mode === "item" && !item){ toast("Enter the item name to sync with."); return; }
+    let c = id ? S.dash.others.find(x => x.id === id) : null;
+    if (!c){ c = {id:"o" + uid6(), name, entries:[]}; S.dash.others.push(c); S.open[c.id] = true; }
+    c.name = name; c.target = parseNum(fd.get("amt"));
+    if (mode === "item"){ c.syncItem = item; c.syncFrom = fd.get("from") || thisMonth(); }
+    else if (c.syncItem){
+      c.entries = [...(c.entries || []), ...otherSyncRows(c).filter(r => r.paid).map(r => ({id:"r" + uid6(), date:r.label + "-01", amount:r.paid}))];
+      delete c.syncItem; delete c.syncFrom;
+    }
+    closeSheet(); dashTouch();
+  }
+  else if (t === "goal"){
+    const id = f.dataset.id; const name = String(fd.get("name")).trim(); const mode = fd.get("mode");
+    const item = String(fd.get("item") || "").trim();
+    if (mode === "item" && !item){ toast("Enter the item name to sync with."); return; }
+    let c = id ? S.dash.goals.find(x => x.id === id) : null;
+    if (!c){ c = {id:"g" + uid6(), name, rows:[]}; S.dash.goals.push(c); S.open[c.id] = true; }
+    c.name = name; c.target = parseNum(fd.get("amt"));
+    if (mode === "manual"){ delete c.linkFrom; delete c.syncType; delete c.syncItem; }
+    else { c.linkFrom = fd.get("from") || thisMonth(); c.syncType = mode; if (mode === "item") c.syncItem = item; else delete c.syncItem; }
+    closeSheet(); dashTouch();
+  }
+  else if (t === "card"){
+    const coll = f.dataset.c, id = f.dataset.id; const name = String(fd.get("name")).trim(); const amt = parseNum(fd.get("amt"));
+    let c = id ? S.dash[coll].find(x => x.id === id) : null;
+    if (!c){ c = {id:coll[0] + uid6(), name}; if (coll === "others") c.entries = []; else c.rows = []; S.dash[coll].push(c); S.open[c.id] = true; }
+    c.name = name; if (coll === "loans") c.total = amt; else c.target = amt;
+    if (coll === "goals"){ const l = fd.get("link"); if (l) c.linkFrom = l; else delete c.linkFrom; }
+    closeSheet(); dashTouch();
+  }
+  else if (t === "settings"){
+    readSettingsForm();
+    const before = Object.fromEntries(S.settings.sources.map(s => [s.id, s.enabled !== false]));
+    const oldAmt = Object.fromEntries(S.settings.sources.map(s => [s.id, r2(s.amount)]));
+    const from = addMonth(thisMonth(), 1); const msgs = [];
+    for (const s of S._srcDraft){
+      if (s.enabled === undefined) delete s.enabled;
+      const was = before[s.id] !== false, now = s.enabled !== false;
+      if (was === now || !(s.id in before)) { if (!now && !s.offFrom) s.offFrom = from; continue; }
+      if (!now){ s.offFrom = from; setSourceOff(s.id, from, true); msgs.push(`${s.name} paused from ${shortMonth(from)}`); }
+      else { delete s.offFrom; S.settings.sources = S._srcDraft; setSourceOff(s.id, from, false); msgs.push(`${s.name} added back from ${shortMonth(from)}`); }
+    }
+    /* A new usual amount applies to upcoming payrolls (today onward) that still use the old amount. */
+    /* Payrolls you already received, or ones you changed by hand in Months, are left alone. */
+    const today = todayISO();
+    for (const s of S._srcDraft){
+      if (!(s.id in oldAmt) || r2(s.amount) === oldAmt[s.id]) continue;
+      let n = 0;
+      for (const k of monthKeys().filter(x => x >= thisMonth())){
+        const m = M(k); let changed = false;
+        for (const p of m.payrolls) if (p.source === s.id && p.date >= today && r2(p.salary) === oldAmt[s.id]){ p.salary = r2(s.amount); changed = true; n++; }
+        if (changed) save("m-" + k);
+      }
+      msgs.push(n ? `${s.name} updated to ${peso(s.amount)} on ${n} upcoming payroll${n === 1 ? "" : "s"}` : `${s.name} amount saved for new months`);
+    }
+    S.settings.sources = S._srcDraft; save("settings"); closeSheet(); render(); toast(msgs.join(". ") || "Pay schedule saved");
+  }
+});
+
+/* Return to "now" whenever the app is reopened, and pick up changes from other devices. */
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState !== "visible" || !S.ready) return;
+  if (!dlg.open && !editing()){ S.slipRef = null; S.monthKey = null; render(); }
+  if (!navigator.onLine || !sheetId()) return;
+  if (tokenValid()){ sync(); pull(true); }
+  else if (LS.get(K_SIGNED, false) && !dlg.open && !editing() && silentAllowed()) signIn(true);
+});
+
+/* ---------- boot ---------- */
+function applyDoc(id, body){
+  if (id === "settings") S.settings = body;
+  else if (id === "dashboard") S.dash = Object.assign({loans:[], goals:[], others:[]}, body);
+  else if (id.startsWith("m-")){ if (body) S.months[id.slice(2)] = body; else delete S.months[id.slice(2)]; }
+}
+function ensureDefaults(){
+  if (!S.settings){ S.settings = clone(DEFAULT_SETTINGS); save("settings"); }
+  if (!S.dash){ S.dash = {loans:[], goals:[], others:[]}; save("dashboard"); }
+  if (!monthKeys().length){ createMonth(thisMonth()); }
+}
+function loadLocal(){
+  S.months = {}; S.settings = null; S.dash = null;
+  for (const [id, body] of Object.entries(LS.get(K_DOCS, {}))) if (body) applyDoc(id, clone(body));
+  return !!(S.settings && S.dash);
+}
+function silentAllowed(){ try { const t = +sessionStorage.getItem("sahod:silentAt") || 0; return Date.now() - t > 60000; } catch(e){ return true; } }
+
+/* First-time setup: sign in, then connect a spreadsheet. */
+function viewSetup(msg){
+  document.body.classList.add("setup-mode");
+  const signed = tokenValid();
+  main.innerHTML = `<div class="setup" style="text-align:left">
+    <h3>Welcome to Sahod</h3>
+    ${!CFG.clientId ? `<p class="muted">This copy of Sahod doesn't have a Google client ID yet. Open <b>config.js</b>, paste your client ID, and upload it again.</p>` : `
+    <p class="muted">Your data lives in a Google Sheet in your own Google Drive. Sahod keeps a copy on this phone, so it works offline and syncs when you're back online.</p>
+    ${msg ? `<p class="banner">${esc(msg)}</p>` : ""}
+    <ol class="steps">
+      <li class="${signed ? "done" : ""}"><b>Sign in with Google</b>${signed ? `<span class="pill ok" style="margin-left:8px">Done</span>` : `<div style="margin-top:10px"><button class="btn" data-act="signin">Sign in with Google</button></div>`}</li>
+      <li><b>Connect your spreadsheet</b>
+        ${signed ? `<form data-form="connect" style="margin-top:10px">
+          <label class="field">Paste the link to your Sahod data spreadsheet<input name="link" placeholder="https://docs.google.com/spreadsheets/d/…" required autocomplete="off"></label>
+          <div class="actions" style="justify-content:flex-start"><button class="btn">Connect</button></div></form>
+          <p class="muted" style="font-size:14px;margin:12px 0 6px">Starting fresh instead?</p>
+          <button class="btn small ghost" data-act="create-sheet">Create a new spreadsheet</button>` : `<p class="muted" style="font-size:14px;margin:6px 0 0">Available after you sign in.</p>`}
+      </li>
+    </ol>`}
+  </div>`;
+}
+async function connectSheet(id, fresh){
+  LS.set(K_SHEET, id); sheetTabs = null; setStatus("Connecting…");
+  try {
+    await ensureDataTab();
+    const remote = fresh ? {} : await readRemote();
+    LS.set(K_DOCS, remote); LS.set(K_DIRTY, {});
+    loadLocal(); ensureDefaults();
+    document.body.classList.remove("setup-mode");
+    S.ready = true; render(); showSyncState(); sync();
+    toast(Object.keys(remote).length ? "Connected. Your data is loaded." : "Connected to a new spreadsheet.");
+  } catch(e){
+    LS.del(K_SHEET);
+    viewSetup(e && e.status === 404 ? "That spreadsheet wasn't found. Check the link, and that you're signed in with the Google account that owns it." : e && e.status === 403 ? "Your Google account doesn't have access to that spreadsheet." : (e && e.message) || "Couldn't connect. Check your connection and try again.");
+    setStatus("");
+  }
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  if (b.dataset.act === "signin") signIn(false);
+  else if (b.dataset.act === "create-sheet"){
+    b.disabled = true; b.textContent = "Creating…";
+    fetch(SHEETS, {method:"POST", headers:{Authorization:"Bearer " + token(), "Content-Type":"application/json"}, body:JSON.stringify({properties:{title:"Sahod data"}, sheets:[{properties:{title:DATA_TAB}}]})})
+      .then(r => r.ok ? r.json() : Promise.reject(r)).then(r => connectSheet(r.spreadsheetId, true))
+      .catch(() => { b.disabled = false; b.textContent = "Create a new spreadsheet"; toast("Couldn't create the spreadsheet. Try again."); });
+  }
+  else if (b.dataset.act === "sync-now"){ if (!tokenValid()) signIn(false); else { sync(); pull(false).then(ok => ok && toast("Up to date")); } }
+  else if (b.dataset.act === "sign-out"){ signOut(); closeSheet(); }
+  else if (b.dataset.act === "disconnect"){
+    if (dirtyCount() && !confirm(`${dirtyCount()} changes haven't synced yet and will be lost. Disconnect anyway?`)) return;
+    [K_DOCS, K_DIRTY, K_SHEET, K_PULLED].forEach(k => LS.del(k)); closeSheet(); S.ready = false; viewSetup();
+  }
+});
+document.addEventListener("submit", e => {
+  if (e.target.dataset.form !== "connect") return; e.preventDefault();
+  const v = String(new FormData(e.target).get("link") || "").trim();
+  const m = v.match(/\/d\/([a-zA-Z0-9_-]{20,})/) || v.match(/^([a-zA-Z0-9_-]{20,})$/);
+  if (!m){ toast("That doesn't look like a Google Sheets link."); return; }
+  e.target.querySelector("button").disabled = true; connectSheet(m[1], false);
+});
+
+function boot(){
+  const auth = handleAuthReturn();
+  const hasLocal = loadLocal();
+  if (!CFG.clientId || !sheetId() || !hasLocal){ S.ready = false; viewSetup(auth && auth.error && auth.error !== "access_denied" ? "Google sign-in didn't finish. Try again." : ""); setStatus(""); return; }
+  /* Open straight away from this phone's copy. */
+  S.ready = true; render(); showSyncState();
+  if (!navigator.onLine) return;
+  if (tokenValid()){ sync(); pull(true); return; }
+  /* Signed in before but the 1-hour Google pass ran out: renew it quietly. */
+  if (!auth && LS.get(K_SIGNED, false) && silentAllowed()) setTimeout(() => { if (!editing() && !dlg.open) signIn(true); }, 400);
+}
+dlg.addEventListener("close", () => { if (S.deferred && !editing()){ S.deferred = false; render(); } });
+if ("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+  let had = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (had) toast("Sahod was updated. Close and reopen it to use the new version."); had = true; });
+}
+boot();
+})();
+
+</script>
+</body>
+</html>
