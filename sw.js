@@ -1,6 +1,6 @@
 /* Sahod offline support.
    Change VERSION whenever you upload new files, so phones fetch the new copy. */
-const VERSION = "sahod-1";
+const VERSION = "sahod-4";
 const SHELL = [
   "./", "index.html", "config.js", "manifest.json",
   "lib/chart.umd.min.js",
@@ -29,6 +29,11 @@ self.addEventListener("fetch", e => {
       const fresh = fetch(req).then(r => { if (r.ok) c.put("index.html", r.clone()); return r; }).catch(() => null);
       return cached || (await fresh) || new Response("Sahod is offline and hasn't been saved on this device yet.", {headers: {"Content-Type": "text/plain"}});
     }));
+    return;
+  }
+  /* config.js: always try the latest from GitHub first, so a new client ID takes effect right away. */
+  if (url.pathname.endsWith("/config.js")){
+    e.respondWith(caches.open(VERSION).then(c => fetch(req, {cache: "no-store"}).then(r => { if (r.ok) c.put(req, r.clone()); return r; }).catch(() => c.match(req, {ignoreSearch: true}))));
     return;
   }
   e.respondWith(caches.open(VERSION).then(async c => {
