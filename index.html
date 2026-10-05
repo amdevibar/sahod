@@ -230,6 +230,9 @@ tr.gap td,tr.gap th{height:8px;padding:0;background:var(--paper);border:0}
 .rows col.cm{width:34%}.rows col.cx{width:34px}.rows col.cc{width:44px}.rows col.cp{width:64px}
 .pill{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;background:var(--soft);color:var(--muted)}
 .pill.ok{background:var(--peso-soft);color:var(--peso)}
+.pill.late{background:var(--debt-soft);color:var(--debt)}
+.latetxt{color:var(--debt);font-weight:600}
+.slip:has(.pill.late) .slip-top{background:#FBE7E1}
 .pill.part{background:var(--mango-soft);color:#8A5A00}
 .donehead{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;padding:14px 4px;margin-top:22px;font:700 21px/1.2 var(--display);color:var(--ink);text-align:left;border-top:1px solid var(--line)}
 .donehead svg{width:18px;height:18px;transition:transform .2s;flex:none}
@@ -345,7 +348,7 @@ main > .sechead:first-child,.banner + .sechead{margin-top:8px}
 
 tr.ptotal th.rowhead{color:var(--peso);font-weight:600;font-size:14px;white-space:normal;line-height:1.2}
 .rows .tot{font-weight:600;color:var(--ink)}
-.goalrows .rows{min-width:520px}
+.goalrows .rows{min-width:0}
 .goalrows .rows col.cm{width:92px}
 .goalrows .rows .money{padding:6px 4px}
 .goalrows .rows .ro{padding:8px 6px}
@@ -503,12 +506,16 @@ function allPayrolls(){
 }
 /* Next payroll from today that isn't marked done (falls back to the next one by date). */
 function upcomingIndex(list){
-  const t = todayISO();
+  const t = todayISO(), cur = thisMonth();
+  /* A payroll this month whose date has passed but isn't marked done stays on Payday as past due. */
+  const due = list.findIndex(x => x.k === cur && x.date < t && !M(x.k).payrolls.find(p => p.id === x.pid)?.done);
+  if (due >= 0) return due;
   let i = list.findIndex(x => x.date >= t && !M(x.k).payrolls.find(p => p.id === x.pid)?.done);
   if (i < 0) i = list.findIndex(x => x.date >= t);
   return i < 0 ? list.length - 1 : i;
 }
 const isPast = k => k < thisMonth();
+const isPastDue = (k, p) => !p.done && !isPast(k) && p.date < todayISO();
 const findItem = (m, name) => m.items.find(x => x.name.trim().toLowerCase() === name.trim().toLowerCase());
 function ordOf(m, p){ const same = m.payrolls.filter(x => x.source === p.source); return same.indexOf(p); }
 function mapPid(fromM, pid, toM){ const p = fromM.payrolls.find(x => x.id === pid); if (!p) return null; const same = toM.payrolls.filter(x => x.source === p.source); return same[ordOf(fromM, p)]?.id || null; }
@@ -867,14 +874,14 @@ function viewPayday(){
   return `
   <div class="slipnav">
     <button class="iconbtn" data-act="slip" data-d="-1" aria-label="Earlier payroll" ${idx <= 0 ? "disabled" : ""}>${chevL}</button>
-    ${idx !== up ? `<button class="linkbtn" data-act="slip-up">Back to upcoming</button>` : `<span class="muted" style="font-size:14px">Upcoming payroll</span>`}
+    ${idx !== up ? `<button class="linkbtn" data-act="slip-up">Back to upcoming</button>` : `<span class="muted" style="font-size:14px">${isPastDue(ref.k, p) ? "Not marked done yet" : "Upcoming payroll"}</span>`}
     <button class="iconbtn" data-act="slip" data-d="1" aria-label="Later payroll" ${idx >= list.length-1 ? "disabled" : ""}>${chevR}</button>
   </div>
   <section class="slip${p.done ? " isdone" : ""}" aria-label="Payroll for ${esc(longDate(p.date))}"><fieldset class="lockset" ${isPast(ref.k) ? "disabled" : ""}>
     <div class="slip-top">
-      <div class="slip-src"><span>${esc(s.name)}${p.done ? `<span class="pill ok" style="margin-left:8px">Done</span>` : ""}</span><span class="chip">${esc(s.short)}</span></div>
+      <div class="slip-src"><span>${esc(s.name)}${p.done ? `<span class="pill ok" style="margin-left:8px">Done</span>` : isPastDue(ref.k, p) ? `<span class="pill late" style="margin-left:8px">Past due</span>` : ""}</span><span class="chip">${esc(s.short)}</span></div>
       <div class="slip-count num">${esc(dd.toLocaleDateString("en-US", {month:"short", day:"numeric"}))}</div>
-      <div class="slip-date">${esc(WEEKDAYS[dd.getDay()])}, ${dd.getFullYear()}${p.date === todayISO() ? ", today" : ""}</div>
+      <div class="slip-date">${esc(WEEKDAYS[dd.getDay()])}, ${dd.getFullYear()}${p.date === todayISO() ? ", today" : ""}${isPastDue(ref.k, p) ? (() => { const n = Math.round((toDate(todayISO()) - dd) / 864e5); return `<span class="latetxt">, ${n} day${n === 1 ? "" : "s"} past due</span>`; })() : ""}</div>
       <label class="slip-salary"><span>Salary</span>${moneyInput(`psal:${kp}`, "p-salary", p.salary, `data-k="${ref.k}" data-p="${p.id}"`, "0.00")}</label>
     </div>
     <div class="perf" aria-hidden="true"></div>
@@ -1070,8 +1077,8 @@ function goalCard(g){
   const {rows, saved, proj, hit, hidden} = goalFigures(g);
   const pA = g.target ? Math.min(100, saved/g.target*100) : 0, pB = g.target ? Math.min(100, proj/g.target*100) : 0;
   const body = rows.map(r => r.linked
-    ? `<tr><td class="lab">${shortMonth(r.label)}</td><td class="ro num">${fmt(r.amount)}</td><td class="ro num">${fmt(r.projected)}</td><td class="ro num tot${g.target && r.cum >= g.target ? " hit" : ""}">${fmt(r.cum)}</td><td></td></tr>`
-    : `<tr><td>${rowField("goals", g.id, r, "label", "month")}</td><td>${rowField("goals", g.id, r, "amount")}</td><td>${rowField("goals", g.id, r, "projected")}</td><td class="ro num tot${g.target && r.cum >= g.target ? " hit" : ""}">${fmt(r.cum)}</td><td>${delRow("goals", g.id, r.id)}</td></tr>`).join("");
+    ? `<tr><td class="lab">${shortMonth(r.label)}</td><td class="ro num">${fmt(r.amount)}</td><td class="ro num tot${g.target && r.cum >= g.target ? " hit" : ""}">${fmt(r.cum)}</td><td></td></tr>`
+    : `<tr><td>${rowField("goals", g.id, r, "label", "month")}</td><td>${rowField("goals", g.id, r, "amount")}</td><td class="ro num tot${g.target && r.cum >= g.target ? " hit" : ""}">${fmt(r.cum)}</td><td>${delRow("goals", g.id, r.id)}</td></tr>`).join("");
   return `<article class="card"><header><h3>${esc(g.name)}</h3>${cardBtns("goals", g)}</header>
     <div class="figure num">${peso(saved)}<small>saved toward ${peso(g.target)}</small></div>
     <div class="bar" role="img" aria-label="${pA.toFixed(0)}% saved, ${pB.toFixed(0)}% projected"><i class="b" style="width:${pB}%"></i><i class="a" style="width:${pA}%"></i></div>
@@ -1079,7 +1086,7 @@ function goalCard(g){
     ${g.target && rows.length ? `<p class="reach${hit ? "" : " no"}">${hit ? `On track to reach ${peso(g.target)} in <b>${monthLabel(hit.label)}</b>` : `Not reached by ${monthLabel(rows[rows.length - 1].label)} at the current plan`}</p>` : ""}
     ${g.linkFrom ? `<p class="synced">Synced with ${goalSyncLabel(g)} in Months from ${shortMonth(g.linkFrom)}${g.syncType === "item" ? ". Paid amounts count as saved." : ""}</p>` : ""}
     ${toggle(g.id, "Savings by month")}
-    ${S.open[g.id] ? `<div class="rowswrap goalrows"><table class="rows num"><colgroup><col class="cm"><col><col><col><col class="cx"></colgroup><thead><tr><th>Month</th><th>Saved</th><th>Projected</th><th>Projected total</th><th></th></tr></thead><tbody>${body}${hidden ? `<tr><td colspan="5" class="ro" style="text-align:left;font-size:13px">Goal reached in ${shortMonth(hit.label)}, so later months aren't tracked.</td></tr>` : ""}${body ? "" : `<tr><td colspan="5" class="ro" style="text-align:left">No entries yet.</td></tr>`}</tbody></table></div>
+    ${S.open[g.id] ? `<div class="rowswrap goalrows"><table class="rows num"><colgroup><col class="cm"><col><col><col class="cx"></colgroup><thead><tr><th>Month</th><th>Saved</th><th>Projected total</th><th></th></tr></thead><tbody>${body}${hidden ? `<tr><td colspan="4" class="ro" style="text-align:left;font-size:13px">Goal reached in ${shortMonth(hit.label)}, so later months aren't tracked.</td></tr>` : ""}${body ? "" : `<tr><td colspan="4" class="ro" style="text-align:left">No entries yet.</td></tr>`}</tbody></table></div>
       ${g.linkFrom ? "" : `<div class="adds"><button class="btn small ghost" data-act="row-add" data-c="goals" data-id="${g.id}">Add month</button></div>`}` : ""}
   </article>`;
 }
